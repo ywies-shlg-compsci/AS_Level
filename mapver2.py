@@ -57,7 +57,7 @@ class FlyingSpike(object):
         self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
 
     def move(self):
-        self.rect.y -= 25
+        self.rect.y -= 252
 
     def active(self):
         self.active = True
