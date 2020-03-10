@@ -150,11 +150,12 @@ while running:
             pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
             if player.rect.right <= flyingspike.rect.left - 32 or player.rect.left -32 <= flyingspike.rect.right:
                 flyingspike.trigger =True
+            if flyingspike.rect.bottom == 0:
+                flyingspike.trigger = False
+                print("False")
             if flyingspike.trigger == True:
                 flyingspike.move()
                 print("trigger")
-            elif flyingspike.rect.bottom == 0:
-                flyingspike.trigger = False
 
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
     pygame.draw.rect(screen, (255, 200, 0), player.rect)
