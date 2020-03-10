@@ -56,7 +56,7 @@ class FlyingSpike(object):
         flyingspikes.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
     def move(self):
-        self.rect.y -= 16
+        self.rect.y -= 20
 
 
 # Initialise pygame
@@ -88,7 +88,7 @@ level = [
     "WWW   W   WW WW WWWWW WWWWW    W       W",
     "W W             W   W W   WWWWWW   WWWWW",
     "W W   WWWWWWWWWWW W WWW W   W          W",
-    "W  FS WE    S     W     W              W",
+    "W  F  WE    S     W     W              W",
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
 ]
 
@@ -141,7 +141,8 @@ while running:
         pygame.draw.rect(screen,(0,255,0),spike.rect)
     for flyingspike in flyingspikes:
         pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
-        flyingspike.move()
+        if player.rect.right <= flyingspike.rect.left - 32 or player.rect.left -32 <= flyingspike.rect.right:
+            flyingspike.move()
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
     pygame.draw.rect(screen, (255, 200, 0), player.rect)
     pygame.display.flip()#update the contents of the entire display
