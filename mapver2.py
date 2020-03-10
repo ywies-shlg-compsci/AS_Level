@@ -4,7 +4,7 @@ import pygame
 class Player(object):
 
     def __init__(self):
-        self.rect = pygame.Rect(16, 208, 16, 16)
+        self.rect = pygame.Rect(32, 432, 16, 16)
 
     def move(self, dx, dy):
 
@@ -31,10 +31,21 @@ class Player(object):
                     self.rect.bottom = wall.rect.top
                 if dy < 0:  # Moving up; Hit the bottom side of the wall
                     self.rect.top = wall.rect.bottom
+
+        for spike in spikes:
+            if self.rect.colliderect(spike.rect):
+                self.rect.left = 32
+                self.rect.top = 432
+
 class Wall(object):
     def __init__(self, pos):
         walls.append(self)
-        self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
+        self.rect = pygame.Rect(pos[0], pos[1], 32, 32)
+
+class Spike(object):
+    def __init__(self, pos):
+        spikes.append(self)
+        self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
 
 
 # Initialise pygame
@@ -43,10 +54,11 @@ pygame.init()
 
 # Set up the display
 pygame.display.set_caption("Get to the red square!" )#the headline
-screen = pygame.display.set_mode((640, 240))#the size of the screen
+screen = pygame.display.set_mode((1280, 480))#the size of the screen
 clock = pygame.time.Clock()
 walls = []  # List to hold the walls
 player = Player()
+spikes = []
 
 
 # Holds the level layout in a list of strings.
@@ -61,10 +73,10 @@ level = [
     "W   W     W W W WWWW   W  W WW W       W",
     "W   WWW WWW W W W  WWW W WWw W W     W W",
     "W     W   W   W        W     W WWWWWWW W",
-    "WWW   W   WW WW WWWWW WWWWW  W W       W",
+    "WWW   W   WW WW WWWWW WWWWW    W       W",
     "W W             W   W W   WWWWWW   WWWWW",
     "W W   WWWWWWWWWWW W WWW W   W          W",
-    "W     WE          W     W              W",
+    "W   S WE    S     W     W              W",
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
 ]
 
@@ -75,13 +87,17 @@ for row in level:
         if col == "W":
             Wall((x, y))#thw wall block
         if col == "E":
-            end_rect = pygame.Rect(x, y, 16, 16)#the exit block
-        x += 16
-    y += 16
+            end_rect = pygame.Rect(x, y, 32, 32)#the exit block
+        if col == "S":
+            Spike((x,y+22))
+        x += 32
+    y += 32
     x = 0
 
 running = True
 while running:
+    v = 8
+    clock.tick(120)
 
     for e in pygame.event.get():#quit function
         if e.type == pygame.QUIT:
@@ -90,13 +106,14 @@ while running:
             running = False
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
-        player.move(-2, 0)
+        player.move(-v, 0)
     if key[pygame.K_RIGHT]:
-        player.move(2, 0)
+        player.move(v, 0)
     if key[pygame.K_UP]:
-        player.move(0, -2)
+        player.move(0, -v)
     if key[pygame.K_DOWN]:
-        player.move(0, 2)
+        player.move(0, v)
+
 
     # Just added this to make it slightly fun ;)
     if player.rect.colliderect(end_rect):
@@ -106,6 +123,8 @@ while running:
     screen.fill((0, 0, 0))#background color
     for wall in walls:
         pygame.draw.rect(screen, (255, 255, 255), wall.rect)#wall color
+    for spike in spikes:
+        pygame.draw.rect(screen,(0,255,0),spike.rect)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
     pygame.draw.rect(screen, (255, 200, 0), player.rect)
     pygame.display.flip()#update the contents of the entire display
