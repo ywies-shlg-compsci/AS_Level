@@ -36,6 +36,10 @@ class Player(object):
             if self.rect.colliderect(spike.rect):
                 self.rect.left = 32
                 self.rect.top = 432
+        for flyingspike in flyingspikes:
+            if self.rect.colliderect(flyingspike.rect):
+                self.rect.left = 32
+                self.rect.top = 432
 
 class Wall(object):
     def __init__(self, pos):
@@ -46,6 +50,13 @@ class Spike(object):
     def __init__(self, pos):
         spikes.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
+
+class FlyingSpike(object):
+    def __init__(self, pos):
+        flyingspikes.append(self)
+        self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
+    def move(self):
+        self.rect.y -= 16
 
 
 # Initialise pygame
@@ -59,6 +70,7 @@ clock = pygame.time.Clock()
 walls = []  # List to hold the walls
 player = Player()
 spikes = []
+flyingspikes = []
 
 
 # Holds the level layout in a list of strings.
@@ -76,7 +88,7 @@ level = [
     "WWW   W   WW WW WWWWW WWWWW    W       W",
     "W W             W   W W   WWWWWW   WWWWW",
     "W W   WWWWWWWWWWW W WWW W   W          W",
-    "W   S WE    S     W     W              W",
+    "W  FS WE    S     W     W              W",
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
 ]
 
@@ -88,6 +100,8 @@ for row in level:
             Wall((x, y))#thw wall block
         if col == "E":
             end_rect = pygame.Rect(x, y, 32, 32)#the exit block
+        if col == "F":
+            FlyingSpike((x, 650))
         if col == "S":
             Spike((x,y+22))
         x += 32
@@ -125,6 +139,9 @@ while running:
         pygame.draw.rect(screen, (255, 255, 255), wall.rect)#wall color
     for spike in spikes:
         pygame.draw.rect(screen,(0,255,0),spike.rect)
+    for flyingspike in flyingspikes:
+        pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
+        flyingspike.move()
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
     pygame.draw.rect(screen, (255, 200, 0), player.rect)
     pygame.display.flip()#update the contents of the entire display
