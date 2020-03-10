@@ -57,7 +57,7 @@ class FlyingSpike(object):
         self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
 
     def move(self):
-        self.rect.y -= 20
+        self.rect.y -= 25
 
     def active(self):
         self.active = True
@@ -114,7 +114,7 @@ for row in level:
         x += 32
     y += 32
     x = 0
-
+KEY_PRESSED = False
 running = True
 while running:
     v = 8
@@ -128,12 +128,16 @@ while running:
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
         player.move(-v, 0)
+        KEY_PRESSED = True
     if key[pygame.K_RIGHT]:
         player.move(v, 0)
+        KEY_PRESSED = True
     if key[pygame.K_UP]:
         player.move(0, -v)
+        KEY_PRESSED = True
     if key[pygame.K_DOWN]:
         player.move(0, v)
+        KEY_PRESSED = True
 
 
     # Just added this to make it slightly fun ;)
@@ -148,7 +152,7 @@ while running:
         pygame.draw.rect(screen,(0,255,0),spike.rect)
     for flyingspike in flyingspikes:
             pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
-            if player.rect.right <= flyingspike.rect.left - 32 or player.rect.left -32 <= flyingspike.rect.right:
+            if (player.rect.right <= flyingspike.rect.left - 32 or player.rect.left -32 <= flyingspike.rect.right )and KEY_PRESSED == True:
                 flyingspike.trigger =True
             if flyingspike.rect.bottom == 0:
                 flyingspike.trigger = False
