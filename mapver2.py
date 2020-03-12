@@ -67,7 +67,7 @@ class FlyingSpike(object):
 
 class Monster(object):
     def __init__(self, pos):
-        monsters.append(self)
+
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
 
     def moveright(self,dx):
@@ -124,7 +124,8 @@ for row in level:
         if col == "S":
             Spike((x,y+22))
         if col == "M":
-            Monster((x,y+16))
+            monsters.append( Monster((x,y+16)))
+
         x += 32
     y += 32
     x = 0
@@ -176,7 +177,6 @@ while running:
             print("trigger")
     for monster in monsters:
         pygame.draw.rect(screen, (0, 255, 255), monster.rect)
-        
 
 
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
