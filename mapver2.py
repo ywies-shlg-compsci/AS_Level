@@ -65,6 +65,17 @@ class FlyingSpike(object):
     def trigger(self):
         self.trigger = False
 
+class Monster(object):
+    def __init__(self, pos):
+        monsters.append(self)
+        self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
+
+    def moveright(self,dx):
+        self.rect.x += dx
+    def moveleft(self,dx):
+        self.rect.x -= dx
+
+
 
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -78,6 +89,7 @@ walls = []  # List to hold the walls
 player = Player()
 spikes = []
 flyingspikes = []
+monsters = []
 
 
 # Holds the level layout in a list of strings.
@@ -93,7 +105,7 @@ level = [
     "W   WWW WWW W W W  WWW W WWw W W     W W",
     "W     W   W   W        W     W WWWWWWW W",
     "WWW   W   WW WW WWWWW WWWWW    W       W",
-    "W W             W   W W   WWWWWW   WWWWW",
+    "W W       M     W   W W   WWWWWW   WWWWW",
     "W W   WWWWWWWWWWW W WWW W   W          W",
     "W  F  WE    S     W     W              W",
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
@@ -111,6 +123,8 @@ for row in level:
             FlyingSpike((x, 650))
         if col == "S":
             Spike((x,y+22))
+        if col == "M":
+            Monster((x,y+16))
         x += 32
     y += 32
     x = 0
@@ -151,15 +165,19 @@ while running:
     for spike in spikes:
         pygame.draw.rect(screen,(0,255,0),spike.rect)
     for flyingspike in flyingspikes:
-            pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
-            if (player.rect.right <= flyingspike.rect.left - 32 or player.rect.left -32 <= flyingspike.rect.right )and KEY_PRESSED == True:
-                flyingspike.trigger =True
-            if flyingspike.rect.bottom == 0:
-                flyingspike.trigger = False
-                print("False")
-            if flyingspike.trigger == True:
-                flyingspike.move()
-                print("trigger")
+        pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
+        if (player.rect.right <= flyingspike.rect.left - 32 or player.rect.left -32 <= flyingspike.rect.right )and KEY_PRESSED == True:
+            flyingspike.trigger =True
+        if flyingspike.rect.bottom == 0:
+            flyingspike.trigger = False
+            print("False")
+        if flyingspike.trigger == True:
+            flyingspike.move()
+            print("trigger")
+    for monster in monsters:
+        pygame.draw.rect(screen, (0, 255, 255), monster.rect)
+        
+
 
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
     pygame.draw.rect(screen, (255, 200, 0), player.rect)
