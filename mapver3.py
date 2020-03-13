@@ -72,37 +72,53 @@ class Monster(object):
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
 
         self.state = ''
-        self.statelist = ['left', 30, 'right', 30]
+        self.statelist = ['left', 60, 'up',60, 'down',60, 'right', 60]
 
         self.statecounter = 0
         self.counter = self.statelist[self.statecounter + 1]
 
 
-    def move(self, dx):
-
-
+    def move(self, dx, dy):
         self.state = self.statelist[self.statecounter]
-
         if self.state == "left":
-            self.moveleft(dx)
+            self.moveleft(dx,dy)
             self.counter -= 1
-            print("h")
+            print("left")
             print(self.counter)
         if self.state == "right":
-            self.moveright(dx)
+            self.moveright(dx,dy)
             self.counter -= 1
-            print("here")
+            print("right")
+            print(self.counter)
+        if self.state == "up":
+            self.moveup(dx,dy)
+            self.counter -= 1
+            print("up")
+            print(self.counter)
+        if self.state == "down":
+            self.movedown(dx,dy)
+            self.counter -= 1
+            print("down")
+            print(self.counter)
         if self. counter == 0:
             self.counter = self.statelist[self.statecounter + 1]
             self.statecounter += 2
-            if self.statecounter > 2:
+            if self.statecounter > 6:
                 self. statecounter =0
 
-    def moveright(self, dx):
-        self.rect.x += dx
+    def moveright(self,dx,dy):
+        if self.counter % 2 == 0:
+            self.rect.x += dx
 
-    def moveleft(self, dx):
-        self.rect.x -= dx
+    def moveleft(self,dx,dy):
+        if self.counter % 2 == 0:
+            self.rect.x -= dx
+    def moveup(self,dx,dy):
+        if self.counter % 2 == 0:
+            self.rect.y -= dy
+    def movedown(self,dx,dy):
+        if self.counter % 2 == 0:
+            self.rect.y += dy
 
 
 
@@ -205,7 +221,7 @@ while running:
             flyingspike.move()
             print("trigger")
     for monster in monsters:
-        monster.move(2)
+        monster.move(2,2)
         pygame.draw.rect(screen, (0, 255, 255), monster.rect)
 
 
