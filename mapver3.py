@@ -70,15 +70,17 @@ class Monster(object):
     def __init__(self, pos):
         monsters.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
-        self.counter = 0
+
         self.state = ''
         self.statelist = ['left', 30, 'right', 30]
 
         self.statecounter = 0
+        self.counter = self.statelist[self.statecounter + 1]
+
 
     def move(self, dx):
 
-        self.counter = self.statelist[self.statecounter + 1]
+
         self.state = self.statelist[self.statecounter]
 
         if self.state == "left":
@@ -90,11 +92,11 @@ class Monster(object):
             self.moveright(dx)
             self.counter -= 1
             print("here")
-
-        if self.statecounter == 2:
-            self.statecounter = 0
         if self. counter == 0:
+            self.counter = self.statelist[self.statecounter + 1]
             self.statecounter += 2
+            if self.statecounter > 2:
+                self. statecounter =0
 
     def moveright(self, dx):
         self.rect.x += dx
