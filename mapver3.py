@@ -72,7 +72,7 @@ class Monster(object):
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
 
         self.state = ''
-        self.statelist = ['left', 60, 'up',60, 'down',60, 'right', 60]
+        self.statelist = ['left',60, 'up',60, 'down',60, 'right',60]
 
         self.statecounter = 0
         self.counter = self.statelist[self.statecounter + 1]
