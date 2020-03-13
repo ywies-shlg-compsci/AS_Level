@@ -67,36 +67,36 @@ class FlyingSpike(object):
 
 
 class Monster(object):
-    def __init__(self, pos):
+    def __init__(self, pos, dx,dy ,behavelist):
         monsters.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
-
+        self.dx = dx
+        self.dy = dy
         self.state = ''
-        self.statelist = ['left',60, 'up',60, 'down',60, 'right',60]
-
+        self.statelist = behavelist
         self.statecounter = 0
         self.counter = self.statelist[self.statecounter + 1]
 
 
-    def move(self, dx, dy):
+    def move(self):
         self.state = self.statelist[self.statecounter]
         if self.state == "left":
-            self.moveleft(dx,dy)
+            self.moveleft(self.dx,self.dy)
             self.counter -= 1
             print("left")
             print(self.counter)
         if self.state == "right":
-            self.moveright(dx,dy)
+            self.moveright(self.dx,self.dy)
             self.counter -= 1
             print("right")
             print(self.counter)
         if self.state == "up":
-            self.moveup(dx,dy)
+            self.moveup(self.dx,self.dy)
             self.counter -= 1
             print("up")
             print(self.counter)
         if self.state == "down":
-            self.movedown(dx,dy)
+            self.movedown(self.dx,self.dy)
             self.counter -= 1
             print("down")
             print(self.counter)
@@ -135,6 +135,7 @@ player = Player()
 spikes = []
 flyingspikes = []
 monsters = []
+behavelist =[]
 
 
 # Holds the level layout in a list of strings.
@@ -169,7 +170,8 @@ for row in level:
         if col == "S":
             Spike((x,y+22))
         if col == "M":
-            monsters.append( Monster((x,y+16)))
+            behavelist = ['left',60, 'up',60, 'down',60, 'right',60]
+            monsters.append( Monster((x,y+16),3,2,behavelist))
 
         x += 32
     y += 32
@@ -221,7 +223,7 @@ while running:
             flyingspike.move()
             print("trigger")
     for monster in monsters:
-        monster.move(2,2)
+        monster.move()
         pygame.draw.rect(screen, (0, 255, 255), monster.rect)
 
 
