@@ -40,6 +40,10 @@ class Player(object):
             if self.rect.colliderect(flyingspike.rect):
                 self.rect.left = 32
                 self.rect.top = 432
+        for squaremonster in squaremonsters:
+            if self.rect.colliderect(squaremonster.rect):
+                self.rect.left = 32
+                self.rect.top = 432
 
 class Wall(object):
     def __init__(self, pos):
@@ -54,10 +58,10 @@ class Spike(object):
 class FlyingSpike(object):
     def __init__(self, pos):
         flyingspikes.append(self)
-        self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
+        self.rect = pygame.Rect(pos[0], pos[1], 10, 20)
 
     def move(self):
-        self.rect.y -= 25
+        self.rect.y -= 32
 
     def active(self):
         self.active = True
@@ -66,9 +70,9 @@ class FlyingSpike(object):
         self.trigger = False
 
 
-class Monster(object):
+class SquareMonster(object):
     def __init__(self, pos, dx,dy ,behavelist):
-        monsters.append(self)
+        squaremonsters.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
         self.dx = dx
         self.dy = dy
@@ -134,7 +138,7 @@ walls = []  # List to hold the walls
 player = Player()
 spikes = []
 flyingspikes = []
-monsters = []
+squaremonsters = []
 behavelist =[]
 
 
@@ -171,7 +175,7 @@ for row in level:
             Spike((x,y+22))
         if col == "M":
             behavelist = ['left',60, 'up',60, 'down',60, 'right',60]
-            monsters.append( Monster((x,y+16),3,2,behavelist))
+            squaremonsters.append( SquareMonster((x,y+16),3,2,behavelist))
 
         x += 32
     y += 32
@@ -222,9 +226,9 @@ while running:
         if flyingspike.trigger == True:
             flyingspike.move()
             print("trigger")
-    for monster in monsters:
-        monster.move()
-        pygame.draw.rect(screen, (0, 255, 255), monster.rect)
+    for squaremonster in squaremonsters:
+        squaremonster.move()
+        pygame.draw.rect(screen, (0, 255, 255), squaremonster.rect)
 
 
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
