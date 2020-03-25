@@ -44,6 +44,8 @@ class Player(object):
             if self.rect.colliderect(squaremonster.rect):
                 self.rect.left = 32
                 self.rect.top = 432
+    def status(self):
+        self.status = True
 
 class Wall(object):
     def __init__(self, pos):
@@ -62,9 +64,6 @@ class FlyingSpike(object):
 
     def move(self):
         self.rect.y -= 32
-
-    def active(self):
-        self.active = True
 
     def trigger(self):
         self.trigger = False
@@ -230,8 +229,13 @@ while running:
         squaremonster.move()
         pygame.draw.rect(screen, (0, 255, 255), squaremonster.rect)
 
+    if player. status == True:
+        pygame.draw.rect(screen, (255, 200, 0), player.rect)
+    else:
+        print("dead")
+        break
 
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
-    pygame.draw.rect(screen, (255, 200, 0), player.rect)
+
     pygame.display.flip()#update the contents of the entire display
     #pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
