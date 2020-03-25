@@ -89,23 +89,23 @@ class SquareMonster(object):
         if self.state == "left":
             self.moveleft(self.dx,self.dy)
             self.counter -= 1
-            print("left")
-            print(self.counter)
+            #print("left")
+            #print(self.counter)
         if self.state == "right":
             self.moveright(self.dx,self.dy)
             self.counter -= 1
-            print("right")
-            print(self.counter)
+            #print("right")
+            #print(self.counter)
         if self.state == "up":
             self.moveup(self.dx,self.dy)
             self.counter -= 1
-            print("up")
-            print(self.counter)
+            #print("up")
+            #print(self.counter)
         if self.state == "down":
             self.movedown(self.dx,self.dy)
             self.counter -= 1
-            print("down")
-            print(self.counter)
+            #print("down")
+            #print(self.counter)
         if self. counter == 0:
             self.counter = self.statelist[self.statecounter + 1]
             self.statecounter += 2
@@ -224,10 +224,10 @@ while running:
             flyingspike.trigger =True
         if flyingspike.rect.bottom == 0:
             flyingspike.trigger = False
-            print("False")
+
         if flyingspike.trigger == True:
             flyingspike.move()
-            print("trigger")
+
     for squaremonster in squaremonsters:
         squaremonster.move()
         pygame.draw.rect(screen, (0, 255, 255), squaremonster.rect)
@@ -236,9 +236,12 @@ while running:
         pygame.draw.rect(screen, (255, 200, 0), player.rect)
     elif player.status == False:
         print("dead")
-        for i in range(0,10):
+        for i in range(0,30):
             if i % 2 == 0:
                 pygame.draw.rect(screen, (255, 200, 0), player.rect)
+            else:
+                print("nothing")
+        player.status = True
 
 
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
