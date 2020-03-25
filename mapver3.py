@@ -6,6 +6,7 @@ class Player(object):
     def __init__(self):
         self.rect = pygame.Rect(32, 432, 16, 16)
         self.status = True
+        self.flashcounter = 10
 
     def move(self, dx, dy):
 
@@ -235,15 +236,15 @@ while running:
     if player.status == True:
         pygame.draw.rect(screen, (255, 200, 0), player.rect)
     elif player.status == False:
-        print("dead")
-        for i in range(0,30):
-            if i % 2 == 0:
-                pygame.draw.rect(screen, (255, 200, 0), player.rect)
-            else:
-                print("nothing")
-        player.status = True
+        #print("dead")
+        player.flashcounter= player.flashcounter -1
+        if player.flashcounter % 2 == 1:
+            pygame.draw.rect(screen, (255, 200, 0), player.rect)
+        elif player.flashcounter == 0:
+            player.status = True
+            player.flashcounter = 10
 
-
+    #print(player.flashcounter)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
 
     pygame.display.flip()#update the contents of the entire display
