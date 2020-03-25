@@ -5,6 +5,7 @@ class Player(object):
 
     def __init__(self):
         self.rect = pygame.Rect(32, 432, 16, 16)
+        self.status = True
 
     def move(self, dx, dy):
 
@@ -36,16 +37,18 @@ class Player(object):
             if self.rect.colliderect(spike.rect):
                 self.rect.left = 32
                 self.rect.top = 432
+                player.status = False
         for flyingspike in flyingspikes:
             if self.rect.colliderect(flyingspike.rect):
                 self.rect.left = 32
                 self.rect.top = 432
+                player.status = False
         for squaremonster in squaremonsters:
             if self.rect.colliderect(squaremonster.rect):
                 self.rect.left = 32
                 self.rect.top = 432
-    def status(self):
-        self.status = True
+                player.status = False
+
 
 class Wall(object):
     def __init__(self, pos):
@@ -229,11 +232,14 @@ while running:
         squaremonster.move()
         pygame.draw.rect(screen, (0, 255, 255), squaremonster.rect)
 
-    if player. status == True:
+    if player.status == True:
         pygame.draw.rect(screen, (255, 200, 0), player.rect)
-    else:
+    elif player.status == False:
         print("dead")
-        break
+        for i in range(0,10):
+            if i % 2 == 0:
+                pygame.draw.rect(screen, (255, 200, 0), player.rect)
+
 
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
 
