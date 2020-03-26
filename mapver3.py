@@ -49,6 +49,12 @@ class Player(object):
                 self.rect.left = 32
                 self.rect.top = 432
                 player.status = False
+        for trackingmonster in trackingmonsters:
+            if self.rect.colliderect(trackingmonster.rect):
+                self.rect.left = 32
+                self.rect.top = 432
+                player.status = False
+
 
 
 class Wall(object):
@@ -74,13 +80,13 @@ class FlyingSpike(object):
 
 
 class SquareMonster(object):
-    def __init__(self, pos, dx,dy ,behavelist):
+    def __init__(self, pos, dx,dy ,behavelist1):
         squaremonsters.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
         self.dx = dx
         self.dy = dy
         self.state = ''
-        self.statelist = behavelist
+        self.statelist = behavelist1
         self.statecounter = 0
         self.counter = self.statelist[self.statecounter + 1]
 
@@ -127,6 +133,23 @@ class SquareMonster(object):
         if self.counter % 2 == 0:
             self.rect.y += dy
 
+class Trackingmonster(object):
+    def __init__(self, pos, dx, dy):
+        trackingmonsters.append(self)
+        self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
+        self.dx = dx
+        self.dy = dy
+    def moveright(self):
+        self.rect.x += self.dx
+
+    def moveleft(self):
+        self.rect.x -= self.dx
+
+    def moveup(self):
+        self.rect.y -= self.dy
+
+    def movedown(self):
+        self.rect.y += self.dy
 
 
 # Initialise pygame
@@ -142,7 +165,12 @@ player = Player()
 spikes = []
 flyingspikes = []
 squaremonsters = []
-behavelist =[]
+trackingmonsters = []
+
+behavelist1 =[]
+behavelist2 = []
+
+
 
 
 # Holds the level layout in a list of strings.
@@ -151,7 +179,7 @@ level = [
     "W                                      W",
     "W         WWWWWW   WWW    WWWW  WWWWW  W",
     "W   WWWW       W   W   WWWW       W    W",
-    "W   W        WWWW  W  WW    W    WW    W",
+    "W T W        WWWW  W  WW    W    WW    W",
     "W WWW  WWWW        WW  W  W WW         W",
     "W   W     W W      W   W  W    WWW   WWW",
     "W   W     W W W WWWW   W  W WW W       W",
@@ -177,8 +205,10 @@ for row in level:
         if col == "S":
             Spike((x,y+22))
         if col == "M":
-            behavelist = ['left',60, 'up',60, 'down',60, 'right',60]
-            squaremonsters.append( SquareMonster((x,y+16),3,2,behavelist))
+            behavelist1 = ['left',60, 'up',60, 'down',60, 'right',60]
+            squaremonsters.append(SquareMonster((x,y+16),3,2,behavelist1))
+        if col == "T":
+            trackingmonsters.append(Trackingmonster((x,y+16),3,2))
 
         x += 32
     y += 32
@@ -232,6 +262,19 @@ while running:
     for squaremonster in squaremonsters:
         squaremonster.move()
         pygame.draw.rect(screen, (0, 255, 255), squaremonster.rect)
+
+
+    for trackingmonster in trackingmonsters:
+        pygame.draw.rect(screen, (150, 150, 255), trackingmonster.rect)
+        if player.rect.right < trackingmonster.rect.left:
+            trackingmonster.moveleft()
+        if player.rect.right > trackingmonster.rect.left:
+            trackingmonster.moveright()
+        if player.rect.top > trackingmonster.rect.bottom:
+            trackingmonster.movedown()
+        if player.rect.top < trackingmonster.rect.bottom:
+            trackingmonster.moveup()
+
 
     if player.status == True:
         pygame.draw.rect(screen, (255, 200, 0), player.rect)
