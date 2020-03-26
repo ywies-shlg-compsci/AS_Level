@@ -55,6 +55,18 @@ class Player(object):
                 self.rect.top = 432
                 player.status = False
 
+    def drawborder(self, screen):
+        left = self.rect.x
+        top = self.rect.y
+        right = self.rect.x + self.rect.width
+        bottom = self.rect.y + self.rect.height
+        points = []
+        points.append((left, top))
+        points.append((right, top))
+        points.append((right, bottom))
+        points.append((left, bottom))
+        points.append((left, top))
+        pygame.draw.lines(screen, (0, 255, 255), False, points, 1)
 
 
 class Wall(object):
@@ -132,6 +144,18 @@ class SquareMonster(object):
     def movedown(self,dx,dy):
         if self.counter % 2 == 0:
             self.rect.y += dy
+    def drawborder(self, screen):
+        left = self.rect.x
+        top = self.rect.y
+        right = self.rect.x + self.rect.width
+        bottom = self.rect.y + self.rect.height
+        points = []
+        points.append((left, top))
+        points.append((right, top))
+        points.append((right, bottom))
+        points.append((left, bottom))
+        points.append((left, top))
+        pygame.draw.lines(screen, (0, 255, 255), False, points, 1)
 
 class Trackingmonster(object):
     def __init__(self, pos, dx, dy):
@@ -139,17 +163,36 @@ class Trackingmonster(object):
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
         self.dx = dx
         self.dy = dy
-    def moveright(self):
-        self.rect.x += self.dx
+    def moveright(self,dx,dy):
+        self.rect.x += dx
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if dx > 0:  # Moving right; Hit the left side of the wall
+                    self.rect.right = wall.rect.left
 
-    def moveleft(self):
-        self.rect.x -= self.dx
 
-    def moveup(self):
-        self.rect.y -= self.dy
+    def moveleft(self,dx,dy):
+        self.rect.x -= dx
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if dx < 0:  # Moving left; Hit the right side of the wall
+                    self.rect.left = wall.rect.right
 
-    def movedown(self):
-        self.rect.y += self.dy
+    def moveup(self,dx,dy):
+        self.rect.y -= dy
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if dy < 0:  # Moving up; Hit the bottom side of the wall
+                    self.rect.top = wall.rect.bottom
+
+
+    def movedown(self,dx,dy):
+        self.rect.y += dy
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if dy > 0:  # Moving down; Hit the top side of the wall
+                    self.rect.bottom = wall.rect.top
+
 
 
 # Initialise pygame
@@ -261,19 +304,20 @@ while running:
 
     for squaremonster in squaremonsters:
         squaremonster.move()
-        pygame.draw.rect(screen, (0, 255, 255), squaremonster.rect)
+        pygame.draw.rect(screen, (0, 255, 150), squaremonster.rect)
+        squaremonster.drawborder(screen)
 
 
     for trackingmonster in trackingmonsters:
         pygame.draw.rect(screen, (150, 150, 255), trackingmonster.rect)
         if player.rect.right < trackingmonster.rect.left:
-            trackingmonster.moveleft()
+            trackingmonster.moveleft(3,2)
         if player.rect.right > trackingmonster.rect.left:
-            trackingmonster.moveright()
+            trackingmonster.moveright(3,2)
         if player.rect.top > trackingmonster.rect.bottom:
-            trackingmonster.movedown()
+            trackingmonster.movedown(3,2)
         if player.rect.top < trackingmonster.rect.bottom:
-            trackingmonster.moveup()
+            trackingmonster.moveup(3,2)
 
 
     if player.status == True:
@@ -286,9 +330,10 @@ while running:
         elif player.flashcounter == 0:
             player.status = True
             player.flashcounter = 10
-
+    player.drawborder(screen)
     #print(player.flashcounter)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
+
 
     pygame.display.flip()#update the contents of the entire display
     #pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
