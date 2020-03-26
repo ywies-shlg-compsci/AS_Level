@@ -163,39 +163,34 @@ class Trackingmonster(object):
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
         self.dx = dx
         self.dy = dy
-    def move(self,dx,dy):
-        if dx !=0:
-            self.move_single_axis(dx, 0)
-        if dy != 0:
-            self.move_single_axis(0, dy)
 
-    def move_single_axis(self,dx,dy):
+    def moveright(self,dx,dy):
         self.rect.x += dx
-        self.rect.y += dy
-
-        # If you collide with a wall, move out based on velocity
         for wall in walls:
             if self.rect.colliderect(wall.rect):
                 if dx > 0:  # Moving right; Hit the left side of the wall
                     self.rect.right = wall.rect.left
-                if dx < 0:  # Moving left; Hit the right side of the wall
-                    self.rect.left = wall.rect.right
-                if dy > 0:  # Moving down; Hit the top side of the wall
-                    self.rect.bottom = wall.rect.top
-                if dy < 0:  # Moving up; Hit the bottom side of the wall
-                    self.rect.top = wall.rect.bottom
-
-    def moveright(self,dx,dy):
-        self.rect.x += dx
 
     def moveleft(self,dx,dy):
         self.rect.x -= dx
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if dx < 0:  # Moving left; Hit the right side of the wall
+                    self.rect.left = wall.rect.right
 
     def moveup(self,dx,dy):
         self.rect.y -= dy
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if dy < 0:  # Moving up; Hit the bottom side of the wall
+                    self.rect.top = wall.rect.bottom
 
     def movedown(self,dx,dy):
         self.rect.y += dy
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if dy > 0:  # Moving down; Hit the top side of the wall
+                    self.rect.bottom = wall.rect.top
 
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -253,7 +248,7 @@ for row in level:
             behavelist1 = ['left',60, 'up',60, 'down',60, 'right',60]
             squaremonsters.append(SquareMonster((x,y+16),3,2,behavelist1))
         if col == "T":
-            trackingmonsters.append(Trackingmonster((x,y+16),3,2))
+            trackingmonsters.append(Trackingmonster((x,y+16),1,1))
 
         x += 32
     y += 32
@@ -312,18 +307,17 @@ while running:
 
     for trackingmonster in trackingmonsters:
         pygame.draw.rect(screen, (150, 150, 255), trackingmonster.rect)
-        if player.rect.right < trackingmonster.rect.left:
-            trackingmonster.move(3,2)
-            trackingmonster.moveleft(3,2)
-        if player.rect.right > trackingmonster.rect.left:
-            trackingmonster.move(3,2)
-            trackingmonster.moveright(3,2)
-        if player.rect.top > trackingmonster.rect.bottom:
-            trackingmonster.move(3,2)
-            trackingmonster.movedown(3,2)
-        if player.rect.top < trackingmonster.rect.bottom:
-            trackingmonster.move(3, 2)
-            trackingmonster.moveup(3,2)
+        if player.rect.left < trackingmonster.rect.left:
+            trackingmonster.moveleft(trackingmonster.dx,trackingmonster.dy)
+        if player.rect.right > trackingmonster.rect.right:
+
+            trackingmonster.moveright(trackingmonster.dx,trackingmonster.dy)
+        if player.rect.top > trackingmonster.rect.top:
+
+            trackingmonster.movedown(trackingmonster.dx,trackingmonster.dy)
+        if player.rect.bottom < trackingmonster.rect.bottom:
+
+            trackingmonster.moveup(trackingmonster.dx,trackingmonster.dy)
 
 
     if player.status == True:
