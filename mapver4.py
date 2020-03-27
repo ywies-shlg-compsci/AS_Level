@@ -192,6 +192,48 @@ class Trackingmonster(object):
                 if dy > 0:  # Moving down; Hit the top side of the wall
                     self.rect.bottom = wall.rect.top
 
+class RandomMonster(object):
+    def __init__(self, pos, dx, dy):
+        randommonsters.append(self)
+        self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
+        self.dx = dx
+        self.dy = dy
+        self.collisionFlag = False
+
+    def moveright(self,dx,dy):
+        self.rect.x += dx
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if dx > 0:  # Moving right; Hit the left side of the wall
+                    self.rect.right = wall.rect.left
+
+    def moveleft(self,dx,dy):
+        self.rect.x -= dx
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if dx < 0:  # Moving left; Hit the right side of the wall
+                    self.rect.left = wall.rect.right
+
+    def moveup(self,dx,dy):
+        self.rect.y -= dy
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if dy < 0:  # Moving up; Hit the bottom side of the wall
+                    self.rect.top = wall.rect.bottom
+
+    def movedown(self,dx,dy):
+        self.rect.y += dy
+        for wall in walls:
+            if self.rect.colliderect(wall.rect):
+                if dy > 0:  # Moving down; Hit the top side of the wall
+                    self.rect.bottom = wall.rect.top
+
+
+
+
+
+
+
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
 pygame.init()
@@ -206,6 +248,7 @@ spikes = []
 flyingspikes = []
 squaremonsters = []
 trackingmonsters = []
+randommonsters = []
 
 behavelist1 =[]
 #behavelist2 = []
@@ -228,7 +271,7 @@ level = [
     "WWW   W   WW WW WWWWW WWWWW    W       W",
     "W W       M     W   W W   WWWWWW   WWWWW",
     "W W   WWWWWWWWWWW W WWW W   W          W",
-    "W  F  WE    S     W     W              W",
+    "W  F  WE    S     W     W      R       W",
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
 ]
 
@@ -249,6 +292,8 @@ for row in level:
             squaremonsters.append(SquareMonster((x,y+16),3,2,behavelist1))
         if col == "T":
             trackingmonsters.append(Trackingmonster((x,y+16),1,1))
+        if col == "R":
+            randommonsters.append(RandomMonster((x,y+16),2,2))
 
         x += 32
     y += 32
@@ -319,6 +364,10 @@ while running:
 
             trackingmonster.moveup(trackingmonster.dx,trackingmonster.dy)
 
+    for randommonster in randommonsters:
+        pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
+        randommonster.moveright(randommonster.dx,randommonster.dy)
+        
 
     if player.status == True:
         pygame.draw.rect(screen, (255, 200, 0), player.rect)
