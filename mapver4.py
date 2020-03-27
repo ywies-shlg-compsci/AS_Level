@@ -193,24 +193,27 @@ class Trackingmonster(object):
                     self.rect.bottom = wall.rect.top
 
 class RandomMonster(object):
-    def __init__(self, pos, dx, dy):
+    def __init__(self, pos, dx, dy,behavelist2):
         randommonsters.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
         self.dx = dx
         self.dy = dy
-        self.collisionFlag = False
+        self.state = ''
+        self.statelist = behavelist2
+        self.statecounter = 0
+        self.counter = self.statelist[self.statecounter + 1]
     def makebehaviourlist(self):
         xSquare = (self.rect.x//32) -1
         ySquare = (self.rect.y//32) -1
         print(xSquare,ySquare)
         direction = -1
-        if level[xSquare][ySquare + 1]!="W":
+        if level[ySquare + 1][xSquare]!="W":
             direction =0 #Moving down
-        if level[xSquare+1][ySquare ]!="W":
+        if level[ySquare ][xSquare+1]!="W":
             direction =1 #Moving right
-        if level[xSquare][ySquare-1]!="W":
+        if level[ySquare-1][xSquare]!="W":
             direction =2 #Moving up
-        if level[xSquare-1][ySquare ]!="W":
+        if level[ySquare ][xSquare-1]!="W":
             direction =3 #Moving left
 
         if direction == 0:
@@ -273,7 +276,7 @@ trackingmonsters = []
 randommonsters = []
 
 behavelist1 =[]
-#behavelist2 = []
+behavelist2 = []
 
 
 
@@ -315,7 +318,7 @@ for row in level:
         if col == "T":
             trackingmonsters.append(Trackingmonster((x,y+16),1,1))
         if col == "R":
-            randommonsters.append(RandomMonster((x,y+16),2,2))
+            randommonsters.append(RandomMonster((x,y+16),2,2,behavelist2))
 
         x += 32
     y += 32
