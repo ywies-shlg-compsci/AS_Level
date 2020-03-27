@@ -208,7 +208,7 @@ squaremonsters = []
 trackingmonsters = []
 
 behavelist1 =[]
-behavelist2 = []
+#behavelist2 = []
 
 
 
