@@ -199,6 +199,28 @@ class RandomMonster(object):
         self.dx = dx
         self.dy = dy
         self.collisionFlag = False
+    def makebehaviourlist(self):
+        xSquare = (self.rect.x//32) -1
+        ySquare = (self.rect.y//32) -1
+        print(xSquare,ySquare)
+        direction = -1
+        if level[xSquare][ySquare + 1]!="W":
+            direction =0 #Moving down
+        if level[xSquare+1][ySquare ]!="W":
+            direction =1 #Moving right
+        if level[xSquare][ySquare-1]!="W":
+            direction =2 #Moving up
+        if level[xSquare-1][ySquare ]!="W":
+            direction =3 #Moving left
+
+        if direction == 0:
+            self.movedown(self.dx,self.dy)
+        if direction == 1:
+            self.moveright(self.dx,self.dy)
+        if direction == 2:
+            self.moveup(self.dx,self.dy)
+        if direction == 3:
+            self.moveleft(self.dx,self.dy)
 
     def moveright(self,dx,dy):
         self.rect.x += dx
@@ -366,8 +388,8 @@ while running:
 
     for randommonster in randommonsters:
         pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
-        randommonster.moveright(randommonster.dx,randommonster.dy)
-        
+        randommonster.makebehaviourlist()
+
 
     if player.status == True:
         pygame.draw.rect(screen, (255, 200, 0), player.rect)
