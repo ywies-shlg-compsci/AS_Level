@@ -200,11 +200,11 @@ class RandomMonster(object):
         self.dx = dx
         self.dy = dy
         self.freedirection = []
-        self.statelist = [-1,1]
-        self.statecounter = 2
+        self.statelist = []
         self.counter = 0
         self.direction = -1
     def makebehaviourlist(self):#create new behavior
+        self.statelist = []
         xSquare = (self.rect.x//32) -1
         ySquare = (self.rect.y//32) -1
         #print(xSquare,ySquare)
@@ -223,16 +223,16 @@ class RandomMonster(object):
         #print(self.freedirection)
         number = random.randint(0,len(self.freedirection)-1)
         self.statelist.append(self.freedirection[number])
-        self.statelist.append(1)
+        self.statelist.append(16)
         #print(self.statelist)
         self.freedirection = []
+        self.direction = self.statelist[0]
+        self.counter = self.statelist[1]
+        #print((self.direction))
 
 
 
     def move(self):
-        self.direction = self.statelist[self.statecounter]
-        self.counter=self.statelist[self.statecounter + 1]
-        print((self.direction))
         if self.direction == 3:
             self.moveleft(self.dx, self.dy)
             self.counter -= 1
@@ -255,9 +255,8 @@ class RandomMonster(object):
             # print(self.counter)
         if self.counter == 0:
             print(self.statelist)
-            self.counter = self.statelist[self.statecounter + 1]
-            self.statelist = [-1,1]
-
+            self.makebehaviourlist()
+            self.counter = self.statelist[1]
 
     def moveright(self,dx,dy):
         self.rect.x += dx
