@@ -193,16 +193,16 @@ class Trackingmonster(object):
                     self.rect.bottom = wall.rect.top
 
 class RandomMonster(object):
-    def __init__(self, pos, dx, dy,behavelist2):
+    def __init__(self, pos, dx, dy):
         randommonsters.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
         self.dx = dx
         self.dy = dy
         self.state = ''
-        self.statelist = behavelist2
+        self.statelist = []
         self.statecounter = 0
-        self.counter = self.statelist[self.statecounter + 1]
-    def makebehaviourlist(self):
+        self.counter = 0
+    def makebehaviourlist(self):#create new behavior
         xSquare = (self.rect.x//32) -1
         ySquare = (self.rect.y//32) -1
         print(xSquare,ySquare)
@@ -216,42 +216,46 @@ class RandomMonster(object):
         if level[ySquare ][xSquare-1]!="W":
             direction =3 #Moving left
 
-        if direction == 0:
-            self.movedown(self.dx,self.dy)
-        if direction == 1:
-            self.moveright(self.dx,self.dy)
-        if direction == 2:
-            self.moveup(self.dx,self.dy)
-        if direction == 3:
-            self.moveleft(self.dx,self.dy)
+
+    def move(self):
+        self.direction = self.statelist[self.statecounter]
+        if self.direction == 3:
+            self.moveleft(self.dx, self.dy)
+            self.counter -= 1
+            # print("left")
+            # print(self.counter)
+        if self.direction == 1:
+            self.moveright(self.dx, self.dy)
+            self.counter -= 1
+            # print("right")
+            # print(self.counter)
+        if self.direction == 2:
+            self.moveup(self.dx, self.dy)
+            self.counter -= 1
+            # print("up")
+            # print(self.counter)
+        if self.direction == 0:
+            self.movedown(self.dx, self.dy)
+            self.counter -= 1
+            # print("down")
+            # print(self.counter)
+        if self.counter == 0:
+            self.counter = self.statelist[self.statecounter + 1]
+            self.statecounter += 2
+            if self.statecounter > 6:
+                self.statecounter = 0
 
     def moveright(self,dx,dy):
         self.rect.x += dx
-        for wall in walls:
-            if self.rect.colliderect(wall.rect):
-                if dx > 0:  # Moving right; Hit the left side of the wall
-                    self.rect.right = wall.rect.left
 
     def moveleft(self,dx,dy):
         self.rect.x -= dx
-        for wall in walls:
-            if self.rect.colliderect(wall.rect):
-                if dx < 0:  # Moving left; Hit the right side of the wall
-                    self.rect.left = wall.rect.right
 
     def moveup(self,dx,dy):
         self.rect.y -= dy
-        for wall in walls:
-            if self.rect.colliderect(wall.rect):
-                if dy < 0:  # Moving up; Hit the bottom side of the wall
-                    self.rect.top = wall.rect.bottom
 
     def movedown(self,dx,dy):
         self.rect.y += dy
-        for wall in walls:
-            if self.rect.colliderect(wall.rect):
-                if dy > 0:  # Moving down; Hit the top side of the wall
-                    self.rect.bottom = wall.rect.top
 
 
 
@@ -318,7 +322,7 @@ for row in level:
         if col == "T":
             trackingmonsters.append(Trackingmonster((x,y+16),1,1))
         if col == "R":
-            randommonsters.append(RandomMonster((x,y+16),2,2,behavelist2))
+            randommonsters.append(RandomMonster((x,y+16),2,2))
 
         x += 32
     y += 32
