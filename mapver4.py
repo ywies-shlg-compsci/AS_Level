@@ -221,7 +221,7 @@ class RandomMonster(object):
             self.direction =3 #Moving left
             self.freedirection.append(self.direction)
         #print(self.freedirection)
-        number = random.randint(0, 3)
+        number = random.randint(0,len(self.freedirection)-1)
         self.statelist.append(self.freedirection[number])
         self.statelist.append(1)
         print(self.statelist)
