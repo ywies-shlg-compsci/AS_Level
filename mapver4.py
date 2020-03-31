@@ -235,19 +235,19 @@ class RandomMonster(object):
         #print((self.direction))
     def calculatedistance(self):
         if self.direction == 0:
-            if level[self.ySquare + self.num][self.xSquare] != "W":
+            while level[self.ySquare + self.num][self.xSquare] != "W":
                 self.num += 1
 
         if self.direction == 1:
-            if level[self.ySquare ][self.xSquare+ self.num] != "W":
+            while level[self.ySquare ][self.xSquare+ self.num] != "W":
                 self.num += 1
 
         if self.direction == 2:
-            if level[self.ySquare- self.num ][self.xSquare] != "W":
+            while level[self.ySquare- self.num ][self.xSquare] != "W":
                 self.num += 1
 
         if self.direction == 2:
-            if level[self.ySquare ][self.xSquare- self.num] != "W":
+            while level[self.ySquare ][self.xSquare- self.num] != "W":
                 self.num += 1
 
 
