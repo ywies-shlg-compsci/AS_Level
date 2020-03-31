@@ -224,7 +224,7 @@ class RandomMonster(object):
         number = random.randint(0,len(self.freedirection)-1)
         self.statelist.append(self.freedirection[number])
         self.statelist.append(1)
-        print(self.statelist)
+        #print(self.statelist)
         self.freedirection = []
 
 
@@ -254,6 +254,7 @@ class RandomMonster(object):
             # print("down")
             # print(self.counter)
         if self.counter == 0:
+            print(self.statelist)
             self.counter = self.statelist[self.statecounter + 1]
             self.statecounter += 2
 
