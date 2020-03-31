@@ -203,32 +203,52 @@ class RandomMonster(object):
         self.statelist = []
         self.counter = 0
         self.direction = -1
+        self.num = 1
     def makebehaviourlist(self):#create new behavior
         self.statelist = []
-        xSquare = (self.rect.x//32) -1
-        ySquare = (self.rect.y//32) -1
-        #print(xSquare,ySquare)
-        if level[ySquare - 1][xSquare]!="W":
+        self.xSquare = (self.rect.x//32)
+        self.ySquare = (self.rect.y//32)
+        #print(self.xSquare,self.ySquare)
+        if level[self.ySquare + 1][self.xSquare]!="W":
             self.direction =0 #Moving down
             self.freedirection.append(self.direction)
-        if level[ySquare ][xSquare+1]!="W":
+        if level[self.ySquare][self.xSquare+1]!="W":
             self.direction =1 #Moving right
             self.freedirection.append(self.direction)
-        if level[ySquare+1][xSquare]!="W":
+        if level[self.ySquare-1][self.xSquare]!="W":
             self.direction =2 #Moving up
             self.freedirection.append(self.direction)
-        if level[ySquare ][xSquare-1]!="W":
+        if level[self.ySquare ][self.xSquare-1]!="W":
             self.direction =3 #Moving left
             self.freedirection.append(self.direction)
         #print(self.freedirection)
         number = random.randint(0,len(self.freedirection)-1)
         self.statelist.append(self.freedirection[number])
-        self.statelist.append(16)
-        #print(self.statelist)
-        self.freedirection = []
         self.direction = self.statelist[0]
+        self.calculatedistance()
+        print(self.num)
+        self.statelist.append(16*self.num)
+        print(self.statelist)
+        self.freedirection = []
+        self.num = 1
         self.counter = self.statelist[1]
         #print((self.direction))
+    def calculatedistance(self):
+        if self.direction == 0:
+            if level[self.ySquare + self.num][self.xSquare] != "W":
+                self.num += 1
+
+        if self.direction == 1:
+            if level[self.ySquare ][self.xSquare+ self.num] != "W":
+                self.num += 1
+
+        if self.direction == 2:
+            if level[self.ySquare- self.num ][self.xSquare] != "W":
+                self.num += 1
+
+        if self.direction == 2:
+            if level[self.ySquare ][self.xSquare- self.num] != "W":
+                self.num += 1
 
 
 
@@ -254,7 +274,7 @@ class RandomMonster(object):
             # print("down")
             # print(self.counter)
         if self.counter == 0:
-            print(self.statelist)
+            #print(self.statelist)
             self.makebehaviourlist()
             self.counter = self.statelist[1]
 
@@ -335,7 +355,7 @@ for row in level:
         if col == "T":
             trackingmonsters.append(Trackingmonster((x,y+16),1,1))
         if col == "R":
-            randommonsters.append(RandomMonster((x,y+16),2,2))
+            randommonsters.append(RandomMonster((x,y+16),1,1))
 
         x += 32
     y += 32
@@ -408,7 +428,6 @@ while running:
 
     for randommonster in randommonsters:
         pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
-        randommonster.makebehaviourlist()
         randommonster.move()
 
 
