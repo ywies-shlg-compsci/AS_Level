@@ -256,7 +256,7 @@ class RandomMonster(object):
         if self.counter == 0:
             print(self.statelist)
             self.counter = self.statelist[self.statecounter + 1]
-            self.statecounter += 2
+            self.statelist = [-1,1]
 
 
     def moveright(self,dx,dy):
