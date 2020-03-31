@@ -1,5 +1,6 @@
 import os
 import pygame
+import random
 
 class Player(object):
 
@@ -198,27 +199,40 @@ class RandomMonster(object):
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
         self.dx = dx
         self.dy = dy
-        self.state = ''
-        self.statelist = []
-        self.statecounter = 0
+        self.freedirection = []
+        self.statelist = [-1,1]
+        self.statecounter = 2
         self.counter = 0
+        self.direction = -1
     def makebehaviourlist(self):#create new behavior
         xSquare = (self.rect.x//32) -1
         ySquare = (self.rect.y//32) -1
-        print(xSquare,ySquare)
-        direction = -1
-        if level[ySquare + 1][xSquare]!="W":
-            direction =0 #Moving down
+        #print(xSquare,ySquare)
+        if level[ySquare - 1][xSquare]!="W":
+            self.direction =0 #Moving down
+            self.freedirection.append(self.direction)
         if level[ySquare ][xSquare+1]!="W":
-            direction =1 #Moving right
-        if level[ySquare-1][xSquare]!="W":
-            direction =2 #Moving up
+            self.direction =1 #Moving right
+            self.freedirection.append(self.direction)
+        if level[ySquare+1][xSquare]!="W":
+            self.direction =2 #Moving up
+            self.freedirection.append(self.direction)
         if level[ySquare ][xSquare-1]!="W":
-            direction =3 #Moving left
+            self.direction =3 #Moving left
+            self.freedirection.append(self.direction)
+        #print(self.freedirection)
+        number = random.randint(0, 3)
+        self.statelist.append(self.freedirection[number])
+        self.statelist.append(1)
+        print(self.statelist)
+        self.freedirection = []
+
 
 
     def move(self):
         self.direction = self.statelist[self.statecounter]
+        self.counter=self.statelist[self.statecounter + 1]
+        print((self.direction))
         if self.direction == 3:
             self.moveleft(self.dx, self.dy)
             self.counter -= 1
@@ -242,8 +256,7 @@ class RandomMonster(object):
         if self.counter == 0:
             self.counter = self.statelist[self.statecounter + 1]
             self.statecounter += 2
-            if self.statecounter > 6:
-                self.statecounter = 0
+
 
     def moveright(self,dx,dy):
         self.rect.x += dx
@@ -396,6 +409,7 @@ while running:
     for randommonster in randommonsters:
         pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
         randommonster.makebehaviourlist()
+        randommonster.move()
 
 
     if player.status == True:
