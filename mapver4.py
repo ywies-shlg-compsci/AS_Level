@@ -251,7 +251,7 @@ class RandomMonster(object):
         print(self.num)
         self.statelist.append(16*self.num)
 
-        print(self.statelist)
+        print("statelist",self.statelist)
 
         self.freedirection = []
         self.num = 1
@@ -274,13 +274,25 @@ class RandomMonster(object):
                 self.num += 1
     def drawpath(self):
         point = []
-        for i in range(0, 1):
-            point.append((self.rect.x, self.rect.y))
-            point.append((self.rect.x + 16, self.rect.y))
-            point.append((self.rect.x + self.num, self.rect.y + self.num))
-            point.append((self.rect.x + 16 + self.num, self.rect.y + self.num))
+        if len(self.statelist)>=2:
+            for i in range(0, 1):
+                point.append((self.rect.x, self.rect.y))
+                point.append((self.rect.x + 16, self.rect.y))
+                if self.direction == 0:
+                    point.append((self.rect.x , self.rect.y + self.statelist[1]))
+                    point.append((self.rect.x + 16 , self.rect.y + self.statelist[1]))
+                if self.direction == 1:
+                    point.append((self.rect.x + self.statelist[1] , self.rect.y ))
+                    point.append((self.rect.x + 16 + self.statelist[1] , self.rect.y))
+                if self.direction == 2:
+                    point.append((self.rect.x , self.rect.y - self.statelist[1]))
+                    point.append((self.rect.x + 16 , self.rect.y - self.statelist[1]))
+                if self.direction == 3:
+                    point.append((self.rect.x - self.statelist[1], self.rect.y ))
+                    point.append((self.rect.x + 16 - self.statelist[1], self.rect.y))
 
-        pygame.draw.lines(screen, (0, 125, 255), False, point, 1)
+
+            pygame.draw.lines(screen, (0, 125, 255), False, point, 1)
 
 
 
