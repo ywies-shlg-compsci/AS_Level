@@ -245,11 +245,21 @@ class RandomMonster(object):
         #print(self.freedirection)
         #number = random.randint(0,len(self.freedirection)-1)
         self.statelist.append(self.direction)
+        print("Here",self.rect.topleft)
         #self.direction = self.statelist[0]
         self.calculatedistance()
         print(self.num)
         self.statelist.append(16*self.num)
+        point = []
+        for i in range(0,1):
+            point.append((self.rect.x,self.rect.y))
+            point.append((self.rect.x+16, self.rect.y))
+            point.append((self.rect.x+self.num,self.rect.y+self.num))
+            point.append((self.rect.x +16+ self.num, self.rect.y + self.num))
+
+        pygame.draw.lines(screen, (0, 125, 255), False, point, 1)
         print(self.statelist)
+
         self.freedirection = []
         self.num = 1
         self.counter = self.statelist[1]
@@ -499,7 +509,7 @@ while running:
     for randommonster in randommonsters:
         pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
         randommonster.move()
-
+    
 
     if player.status == True:
         pygame.draw.rect(screen, (255, 200, 0), player.rect)
