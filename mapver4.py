@@ -250,14 +250,7 @@ class RandomMonster(object):
         self.calculatedistance()
         print(self.num)
         self.statelist.append(16*self.num)
-        point = []
-        for i in range(0,1):
-            point.append((self.rect.x,self.rect.y))
-            point.append((self.rect.x+16, self.rect.y))
-            point.append((self.rect.x+self.num,self.rect.y+self.num))
-            point.append((self.rect.x +16+ self.num, self.rect.y + self.num))
 
-        pygame.draw.lines(screen, (0, 125, 255), False, point, 1)
         print(self.statelist)
 
         self.freedirection = []
@@ -279,6 +272,15 @@ class RandomMonster(object):
         if self.direction == 2:
             while level[self.ySquare ][self.xSquare- self.num] != "W":
                 self.num += 1
+    def drawpath(self):
+        point = []
+        for i in range(0, 1):
+            point.append((self.rect.x, self.rect.y))
+            point.append((self.rect.x + 16, self.rect.y))
+            point.append((self.rect.x + self.num, self.rect.y + self.num))
+            point.append((self.rect.x + 16 + self.num, self.rect.y + self.num))
+
+        pygame.draw.lines(screen, (0, 125, 255), False, point, 1)
 
 
 
@@ -509,7 +511,8 @@ while running:
     for randommonster in randommonsters:
         pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
         randommonster.move()
-    
+        randommonster.drawpath()
+
 
     if player.status == True:
         pygame.draw.rect(screen, (255, 200, 0), player.rect)
