@@ -2,6 +2,11 @@ import os
 import pygame
 import random
 
+UP = 0
+RIGHT = 1
+DOWN = 2
+LEFT = 3
+
 class Player(object):
 
     def __init__(self):
@@ -205,6 +210,8 @@ class RandomMonster(object):
         self.counter = 0
         self.direction = -1
         self.num = 1
+        self.prePosx = self.rect.x
+        self.prePosy = self.rect.y
     def makebehaviourlist(self):#create new behavior
         self.statelist = []
         self.xSquare = (self.rect.x//32)
@@ -238,6 +245,7 @@ class RandomMonster(object):
         self.statelist = []
         self.xSquare = (self.rect.x//32)
         self.ySquare = (self.rect.y//32)
+
         #print(self.xSquare,self.ySquare)
 
         self.direction = dir
@@ -248,52 +256,65 @@ class RandomMonster(object):
         print("Here",self.rect.topleft)
         #self.direction = self.statelist[0]
         self.calculatedistance()
+        self.num = self.num *2
         print(self.num)
         self.statelist.append(16*self.num)
+        self.prePosx = self.rect.x
+        self.prePosy = self.rect.y
 
         print("statelist",self.statelist)
 
         self.freedirection = []
-        self.num = 1
+        self.num = 1 #must be 1
         self.counter = self.statelist[1]
     def calculatedistance(self):
-        if self.direction == 0:
+        print("pos",self.ySquare,self.xSquare)
+        if self.direction == UP:
             while level[self.ySquare + self.num][self.xSquare] != "W":
                 self.num += 1
 
-        if self.direction == 1:
+        if self.direction == RIGHT:
             while level[self.ySquare ][self.xSquare+ self.num] != "W":
                 self.num += 1
 
-        if self.direction == 2:
+        if self.direction == DOWN:
             while level[self.ySquare- self.num ][self.xSquare] != "W":
                 self.num += 1
 
-        if self.direction == 2:
+        if self.direction == LEFT:
             while level[self.ySquare ][self.xSquare- self.num] != "W":
                 self.num += 1
+
+        self.num -= 1
+
     def drawpath(self):
         point = []
-        if len(self.statelist)>=2:
+        print("previous X: :", self.prePosx)
+        print("previous Y: :", self.prePosy)
+        if len(self.statelist) >= 2:
             for i in range(0, 1):
-                point.append((self.rect.x, self.rect.y))
-                point.append((self.rect.x + 16, self.rect.y))
-                if self.direction == 0:
-                    point.append((self.rect.x , self.rect.y + self.statelist[1]))
-                    point.append((self.rect.x + 16 , self.rect.y + self.statelist[1]))
-                if self.direction == 1:
-                    point.append((self.rect.x + self.statelist[1] , self.rect.y ))
-                    point.append((self.rect.x + 16 + self.statelist[1] , self.rect.y))
-                if self.direction == 2:
-                    point.append((self.rect.x , self.rect.y - self.statelist[1]))
-                    point.append((self.rect.x + 16 , self.rect.y - self.statelist[1]))
-                if self.direction == 3:
-                    point.append((self.rect.x - self.statelist[1], self.rect.y ))
-                    point.append((self.rect.x + 16 - self.statelist[1], self.rect.y))
-
-
+                if self.direction == 0:  # down
+                    point.append((self.prePosx, self.prePosy))
+                    point.append((self.prePosx + 16, self.prePosy))
+                    point.append((self.prePosx + 16, self.prePosy + self.statelist[1]))
+                    point.append((self.prePosx, self.prePosy + self.statelist[1]))
+                if self.direction == 1:  # right
+                    point.append((self.prePosx, self.prePosy))
+                    point.append((self.prePosx + self.statelist[1], self.prePosy))
+                    point.append((self.prePosx + self.statelist[1], self.prePosy + 16))
+                    point.append((self.prePosx, self.prePosy + 16))
+                if self.direction == 2:  # 2 up
+                    point.append((self.prePosx, self.prePosy))
+                    point.append((self.prePosx + 16, self.prePosy))
+                    point.append((self.prePosx + 16, self.prePosy - self.statelist[1]))
+                    point.append((self.prePosx, self.prePosy - self.statelist[1]))
+                if self.direction == 3:  # left
+                    point.append((self.prePosx, self.prePosy))
+                    point.append((self.prePosx - self.statelist[1], self.prePosy))
+                    point.append((self.prePosx - self.statelist[1], self.prePosy + 16))
+                    point.append((self.prePosx, self.prePosy + 16))
+                point.append((self.prePosx, self.prePosy))
             pygame.draw.lines(screen, (0, 125, 255), False, point, 1)
-
 
 
     def move(self):
