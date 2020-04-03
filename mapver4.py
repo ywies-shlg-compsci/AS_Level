@@ -197,6 +197,7 @@ class RandomMonster(object):
     def __init__(self, pos, dx, dy):
         randommonsters.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
+        print(pos[0],pos[1])
         self.dx = dx
         self.dy = dy
         self.freedirection = []
@@ -233,6 +234,25 @@ class RandomMonster(object):
         self.num = 1
         self.counter = self.statelist[1]
         #print((self.direction))
+    def makebehaviourlistkeyboard(self,dir):#create new behavior
+        self.statelist = []
+        self.xSquare = (self.rect.x//32)
+        self.ySquare = (self.rect.y//32)
+        #print(self.xSquare,self.ySquare)
+
+        self.direction = dir
+
+        #print(self.freedirection)
+        #number = random.randint(0,len(self.freedirection)-1)
+        self.statelist.append(self.direction)
+        #self.direction = self.statelist[0]
+        self.calculatedistance()
+        print(self.num)
+        self.statelist.append(16*self.num)
+        print(self.statelist)
+        self.freedirection = []
+        self.num = 1
+        self.counter = self.statelist[1]
     def calculatedistance(self):
         if self.direction == 0:
             while level[self.ySquare + self.num][self.xSquare] != "W":
@@ -253,30 +273,32 @@ class RandomMonster(object):
 
 
     def move(self):
-        if self.direction == 3:
-            self.moveleft(self.dx, self.dy)
-            self.counter -= 1
-            # print("left")
-            # print(self.counter)
-        if self.direction == 1:
-            self.moveright(self.dx, self.dy)
-            self.counter -= 1
-            # print("right")
-            # print(self.counter)
-        if self.direction == 2:
-            self.moveup(self.dx, self.dy)
-            self.counter -= 1
-            # print("up")
-            # print(self.counter)
-        if self.direction == 0:
-            self.movedown(self.dx, self.dy)
-            self.counter -= 1
-            # print("down")
-            # print(self.counter)
-        if self.counter == 0:
-            #print(self.statelist)
-            self.makebehaviourlist()
-            self.counter = self.statelist[1]
+
+        if self.counter != 0:
+            if self.direction == 3:
+                self.moveleft(self.dx, self.dy)
+                self.counter -= 1
+                # print("left")
+                # print(self.counter)
+            if self.direction == 1:
+                self.moveright(self.dx, self.dy)
+                self.counter -= 1
+                # print("right")
+                # print(self.counter)
+            if self.direction == 2:
+                self.moveup(self.dx, self.dy)
+                self.counter -= 1
+                # print("up")
+                # print(self.counter)
+            if self.direction == 0:
+                self.movedown(self.dx, self.dy)
+                self.counter -= 1
+                # print("down")
+                # print(self.counter)
+            #if self.counter == 0:
+                #print(self.statelist)
+                #self.makebehaviourlist()
+                #self.counter = self.statelist[1]
 
     def moveright(self,dx,dy):
         self.rect.x += dx
@@ -290,10 +312,46 @@ class RandomMonster(object):
     def movedown(self,dx,dy):
         self.rect.y += dy
 
+def drawGrid():
+    points = []
+    x = 0
+    y = 0
 
+    for i in range(15*2):
+        points.append((0,y))
+        points.append((40*32,y))
+        y = y + 16
+        points.append((40*32,y))
 
+    pygame.draw.lines(screen,(0,255,255),False,points,1)
+    points = []
+    for i in range(40 * 2):
+        points.append((x,0))
+        points.append((x,15*32))
+        x = x + 16
+        points.append((x, 15 * 32))
 
+    pygame.draw.lines(screen, (0, 255, 255), False, points, 1)
 
+    points = []
+    x = 0
+    y = 0
+
+    for i in range(15):
+        points.append((0, y))
+        points.append((40 * 32, y))
+        y = y + 32
+        points.append((40 * 32, y))
+
+    pygame.draw.lines(screen, (255, 0, 0), False, points, 1)
+    points = []
+    for i in range(40):
+        points.append((x, 0))
+        points.append((x, 15 * 32))
+        x = x + 32
+        points.append((x, 15 * 32))
+
+    pygame.draw.lines(screen, (255, 0, 0), False, points, 1)
 
 
 # Initialise pygame
@@ -371,6 +429,18 @@ while running:
             running = False
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
             running = False
+
+        if e.type == pygame.KEYUP:
+            monster = randommonsters[0]
+            if e.key == pygame.K_a:
+                monster.makebehaviourlistkeyboard(3)
+            if e.key == pygame.K_d:
+                monster.makebehaviourlistkeyboard(1)
+            if e.key == pygame.K_w:
+                monster.makebehaviourlistkeyboard(2)
+            if e.key == pygame.K_s:
+                monster.makebehaviourlistkeyboard(0)
+
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
         player.move(-v, 0)
@@ -444,7 +514,7 @@ while running:
     player.drawborder(screen)
     #print(player.flashcounter)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
-
+    drawGrid()
 
     pygame.display.flip()#update the contents of the entire display
     #pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
