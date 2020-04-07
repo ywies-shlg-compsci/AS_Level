@@ -202,7 +202,7 @@ class RandomMonster(object):
     def __init__(self, pos, dx, dy):
         randommonsters.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
-        print(pos[0],pos[1])
+        #print(pos[0],pos[1])
         self.dx = dx
         self.dy = dy
         self.freedirection = []
@@ -253,23 +253,33 @@ class RandomMonster(object):
         #print(self.freedirection)
         #number = random.randint(0,len(self.freedirection)-1)
         self.statelist.append(self.direction)
-        print("Here",self.rect.topleft)
+        #print("Here",self.rect.topleft)
         #self.direction = self.statelist[0]
         self.calculatedistance()
-        self.num = self.num *2
+        print("previous:",self.num)
+        if self.xSquare % 32 == 0:
+            self.num = self.num *2 + 1
+        if self.xSquare % 32 == 16:
+            self.num = self.num * 2
+        if self.ySquare % 32 == 0:
+            self.num = self.num * 2 + 1
+        if self.ySquare % 32 == 16:
+            self.num = self.num * 2
+
         print(self.num)
+
         self.statelist.append(16*self.num)
         self.prePosx = self.rect.x
         self.prePosy = self.rect.y
 
-        print("statelist",self.statelist)
+        #print("statelist",self.statelist)
 
         self.freedirection = []
         self.num = 1 #must be 1
         self.counter = self.statelist[1]
     def calculatedistance(self):
-        print("pos",self.ySquare,self.xSquare)
-        if self.direction == UP:
+        #print("pos",self.ySquare,self.xSquare)
+        if self.direction == DOWN:
             while level[self.ySquare + self.num][self.xSquare] != "W":
                 self.num += 1
 
@@ -277,7 +287,7 @@ class RandomMonster(object):
             while level[self.ySquare ][self.xSquare+ self.num] != "W":
                 self.num += 1
 
-        if self.direction == DOWN:
+        if self.direction == UP:
             while level[self.ySquare- self.num ][self.xSquare] != "W":
                 self.num += 1
 
@@ -289,8 +299,8 @@ class RandomMonster(object):
 
     def drawpath(self):
         point = []
-        print("previous X: :", self.prePosx)
-        print("previous Y: :", self.prePosy)
+        #print("previous X: :", self.prePosx)
+        #print("previous Y: :", self.prePosy)
         if len(self.statelist) >= 2:
             for i in range(0, 1):
                 if self.direction == 0:  # down
@@ -320,22 +330,22 @@ class RandomMonster(object):
     def move(self):
 
         if self.counter != 0:
-            if self.direction == 3:
+            if self.direction == LEFT:
                 self.moveleft(self.dx, self.dy)
                 self.counter -= 1
                 # print("left")
                 # print(self.counter)
-            if self.direction == 1:
+            if self.direction == RIGHT:
                 self.moveright(self.dx, self.dy)
                 self.counter -= 1
                 # print("right")
                 # print(self.counter)
-            if self.direction == 2:
+            if self.direction == UP:
                 self.moveup(self.dx, self.dy)
                 self.counter -= 1
                 # print("up")
                 # print(self.counter)
-            if self.direction == 0:
+            if self.direction == DOWN:
                 self.movedown(self.dx, self.dy)
                 self.counter -= 1
                 # print("down")
@@ -458,7 +468,7 @@ for row in level:
         if col == "T":
             trackingmonsters.append(Trackingmonster((x,y+16),1,1))
         if col == "R":
-            randommonsters.append(RandomMonster((x,y+16),1,1))
+            randommonsters.append(RandomMonster((x,y+16),2,2))
 
         x += 32
     y += 32
@@ -478,13 +488,13 @@ while running:
         if e.type == pygame.KEYUP:
             monster = randommonsters[0]
             if e.key == pygame.K_a:
-                monster.makebehaviourlistkeyboard(3)
+                monster.makebehaviourlistkeyboard(LEFT)
             if e.key == pygame.K_d:
-                monster.makebehaviourlistkeyboard(1)
+                monster.makebehaviourlistkeyboard(RIGHT)
             if e.key == pygame.K_w:
-                monster.makebehaviourlistkeyboard(2)
+                monster.makebehaviourlistkeyboard(UP)
             if e.key == pygame.K_s:
-                monster.makebehaviourlistkeyboard(0)
+                monster.makebehaviourlistkeyboard(DOWN)
 
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
