@@ -257,14 +257,33 @@ class RandomMonster(object):
         #self.direction = self.statelist[0]
         self.calculatedistance()
         print("previous:",self.num)
-        if self.xSquare % 32 == 0:
-            self.num = self.num *2 + 1
-        if self.xSquare % 32 == 16:
-            self.num = self.num * 2
-        if self.ySquare % 32 == 0:
-            self.num = self.num * 2 + 1
-        if self.ySquare % 32 == 16:
-            self.num = self.num * 2
+        if self.rect.x % 32 == 0 and self.rect.y % 32 == 16:#block bottom left
+            if dir == RIGHT or dir == UP:
+                self.num = self.num + 0.5
+            if dir == LEFT or dir == DOWN:
+                self.num = self.num
+        if self.rect.x % 32 == 0 and self.rect.y % 32 == 0:#block top left
+            if dir == RIGHT or dir == DOWN:
+                self.num = self.num + 0.5
+            if dir == LEFT or dir == UP:
+                self.num = self.num
+        if self.rect.x % 32 == 16 and self.rect.y % 32 == 0:#block top right
+            if dir == LEFT or dir == DOWN:
+                self.num = self.num + 0.5
+            if dir == RIGHT or dir == UP:
+                self.num = self.num
+        if self.rect.x % 32 == 16 and self.rect.y % 32 == 16:#block bottom right
+            if dir == LEFT or dir == UP:
+                self.num = self.num + 0.5
+            if dir == RIGHT or dir == DOWN:
+                self.num = self.num
+
+        #if self.rect.x % 32 == 16:
+            #self.num = self.num * 2
+        #if self.rect.y % 32 == 0:
+            #self.num = self.num * 2 + 1
+        #if self.rect.y % 32 == 16:
+            #self.num = self.num * 2
 
         print(self.num)
 
