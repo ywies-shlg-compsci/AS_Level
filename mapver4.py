@@ -94,12 +94,16 @@ class FlyingSpike(object):
     def __init__(self, pos):
         flyingspikes.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 10, 20)
+        self.trigger = False
 
     def move(self):
         self.rect.y -= 32
 
     def trigger(self):
-        self.trigger = False
+        if (player.rect.right <= flyingspike.rect.left - 32 or player.rect.left -32 <= flyingspike.rect.right )and KEY_PRESSED == True:
+            flyingspike.trigger =True
+            print("trigger")
+        
 
 
 class SquareMonster(object):
@@ -265,7 +269,7 @@ class RandomMonster(object):
                 self.num = self.num
         #print("after", self.num)
         self.statelist.append(16*self.num)
-        print(self.statelist)
+        #print(self.statelist)
         self.freedirection = []
         self.num = 1
         self.counter = self.statelist[1]
@@ -494,7 +498,7 @@ level = [
     "WWW   W   WW WW WWWWW WWWWW    W       W",
     "W W    F  M     W   W W   WWWWWW   WWWWW",
     "W W   WWWWWWWWWWW W WWW W   W          W",
-    "W  F  WE    S     W     W      R       W",
+    "W  F  WE    S     W     W      R  F    W",
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
 ]
 
@@ -573,11 +577,6 @@ while running:
         pygame.draw.rect(screen,(0,255,0),spike.rect)
     for flyingspike in flyingspikes:
         pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
-        if (player.rect.right <= flyingspike.rect.left - 32 or player.rect.left -32 <= flyingspike.rect.right )and KEY_PRESSED == True:
-            flyingspike.trigger =True
-        if flyingspike.rect.bottom == 0:
-            flyingspike.trigger = False
-
         if flyingspike.trigger == True:
             flyingspike.move()
 
