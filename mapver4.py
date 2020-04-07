@@ -265,7 +265,7 @@ class RandomMonster(object):
                 self.num = self.num
         #print("after", self.num)
         self.statelist.append(16*self.num)
-        #print(self.statelist)
+        print(self.statelist)
         self.freedirection = []
         self.num = 1
         self.counter = self.statelist[1]
@@ -492,7 +492,7 @@ level = [
     "W   WWW WWW W W W  WWW W WWw W W     W W",
     "W     W   W   W        W     W WWWWWWW W",
     "WWW   W   WW WW WWWWW WWWWW    W       W",
-    "W W       M     W   W W   WWWWWW   WWWWW",
+    "W W    F  M     W   W W   WWWWWW   WWWWW",
     "W W   WWWWWWWWWWW W WWW W   W          W",
     "W  F  WE    S     W     W      R       W",
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
