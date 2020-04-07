@@ -218,23 +218,46 @@ class RandomMonster(object):
         self.ySquare = (self.rect.y//32)
         #print(self.xSquare,self.ySquare)
         if level[self.ySquare + 1][self.xSquare]!="W":
-            self.direction =0 #Moving down
+            self.direction =DOWN #Moving down
             self.freedirection.append(self.direction)
         if level[self.ySquare][self.xSquare+1]!="W":
-            self.direction =1 #Moving right
+            self.direction =RIGHT #Moving right
             self.freedirection.append(self.direction)
         if level[self.ySquare-1][self.xSquare]!="W":
-            self.direction =2 #Moving up
+            self.direction =UP #Moving up
             self.freedirection.append(self.direction)
         if level[self.ySquare ][self.xSquare-1]!="W":
-            self.direction =3 #Moving left
+            self.direction =LEFT #Moving left
             self.freedirection.append(self.direction)
         #print(self.freedirection)
         number = random.randint(0,len(self.freedirection)-1)
         self.statelist.append(self.freedirection[number])
         self.direction = self.statelist[0]
+        dir = self.direction
         self.calculatedistance()
-        print(self.num)
+        print("previous",self.num)
+        print(self.rect.x,self.rect.y)
+        if self.rect.x % 32 == 0 and self.rect.y % 32 == 16:#block bottom left
+            if dir == RIGHT or dir == UP:
+                self.num = self.num + 0.5
+            if dir == LEFT or dir == DOWN:
+                self.num = self.num
+        if self.rect.x % 32 == 0 and self.rect.y % 32 == 0:#block top left
+            if dir == RIGHT or dir == DOWN:
+                self.num = self.num + 0.5
+            if dir == LEFT or dir == UP:
+                self.num = self.num
+        if self.rect.x % 32 == 16 and self.rect.y % 32 == 0:#block top right
+            if dir == LEFT or dir == DOWN:
+                self.num = self.num + 0.5
+            if dir == RIGHT or dir == UP:
+                self.num = self.num
+        if self.rect.x % 32 == 16 and self.rect.y % 32 == 16:#block bottom right
+            if dir == LEFT or dir == UP:
+                self.num = self.num + 0.5
+            if dir == RIGHT or dir == DOWN:
+                self.num = self.num
+        print("after", self.num)
         self.statelist.append(16*self.num)
         print(self.statelist)
         self.freedirection = []
@@ -369,10 +392,10 @@ class RandomMonster(object):
                 self.counter -= 1
                 # print("down")
                 # print(self.counter)
-            #if self.counter == 0:
-                #print(self.statelist)
-                #self.makebehaviourlist()
-                #self.counter = self.statelist[1]
+            if self.counter == 0:
+                print(self.statelist)
+                self.makebehaviourlist()
+                self.counter = self.statelist[1]
 
     def moveright(self,dx,dy):
         self.rect.x += dx
@@ -487,7 +510,9 @@ for row in level:
         if col == "T":
             trackingmonsters.append(Trackingmonster((x,y+16),1,1))
         if col == "R":
-            randommonsters.append(RandomMonster((x,y+16),2,2))
+            temp = RandomMonster([x, y + 16], 2, 2)
+            temp.makebehaviourlist()
+            randommonsters.append(temp)
 
         x += 32
     y += 32
@@ -573,7 +598,7 @@ while running:
     for randommonster in randommonsters:
         pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
         randommonster.move()
-        randommonster.drawpath()
+        #randommonster.drawpath()
 
 
     if player.status == True:
@@ -589,7 +614,7 @@ while running:
     player.drawborder(screen)
     #print(player.flashcounter)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)#exit color
-    drawGrid()
+    #drawGrid()
 
     pygame.display.flip()#update the contents of the entire display
     #pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
