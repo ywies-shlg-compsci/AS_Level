@@ -60,6 +60,11 @@ class Player(object):
                 self.rect.left = 32
                 self.rect.top = 432
                 player.status = False
+        for randommonster in randommonsters:
+            if self.rect.colliderect(randommonster.rect):
+                self.rect.left = 32
+                self.rect.top = 432
+                player.status = False
 
     def drawborder(self, screen):
         left = self.rect.x
@@ -235,8 +240,9 @@ class RandomMonster(object):
         self.direction = self.statelist[0]
         dir = self.direction
         self.calculatedistance()
-        print("previous",self.num)
-        print(self.rect.x,self.rect.y)
+        self.num = random.randint(1,self.num)
+        #print("previous",self.num)
+        #print(self.rect.x,self.rect.y)
         if self.rect.x % 32 == 0 and self.rect.y % 32 == 16:#block bottom left
             if dir == RIGHT or dir == UP:
                 self.num = self.num + 0.5
@@ -257,9 +263,9 @@ class RandomMonster(object):
                 self.num = self.num + 0.5
             if dir == RIGHT or dir == DOWN:
                 self.num = self.num
-        print("after", self.num)
+        #print("after", self.num)
         self.statelist.append(16*self.num)
-        print(self.statelist)
+        #print(self.statelist)
         self.freedirection = []
         self.num = 1
         self.counter = self.statelist[1]
@@ -393,7 +399,7 @@ class RandomMonster(object):
                 # print("down")
                 # print(self.counter)
             if self.counter == 0:
-                print(self.statelist)
+                #print(self.statelist)
                 self.makebehaviourlist()
                 self.counter = self.statelist[1]
 
@@ -477,11 +483,11 @@ behavelist2 = []
 level = [
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
     "W                                      W",
-    "W         WWWWWW   WWW    WWWW  WWWWW  W",
+    "W    R    WWWWWW   WWW    WWWW  WWWWW  W",
     "W   WWWW       W   W   WWWW       W    W",
     "W T W        WWWW  W  WW    W    WW    W",
     "W WWW  WWWW        WW  W  W WW         W",
-    "W   W     W W      W   W  W    WWW   WWW",
+    "W   W     W W   R  W   W  W    WWW   WWW",
     "W   W     W W W WWWW   W  W WW W       W",
     "W   WWW WWW W W W  WWW W WWw W W     W W",
     "W     W   W   W        W     W WWWWWWW W",
