@@ -99,9 +99,10 @@ class FlyingSpike(object):
     def move(self):
         self.rect.y -= 32
 
-    def trigger(self):
-        if (player.rect.right <= flyingspike.rect.left - 32 or player.rect.left -32 <= flyingspike.rect.right )and KEY_PRESSED == True:
-            flyingspike.trigger =True
+    def triggerActive(self,player,key):
+
+        if (player.rect.right >= self.rect.left - 32 or player.rect.left -32 >= self.rect.right )and key == True:
+            self.trigger =True
             print("trigger")
         
 
@@ -577,6 +578,7 @@ while running:
         pygame.draw.rect(screen,(0,255,0),spike.rect)
     for flyingspike in flyingspikes:
         pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
+        flyingspike.triggerActive(player, KEY_PRESSED)
         if flyingspike.trigger == True:
             flyingspike.move()
 
