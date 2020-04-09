@@ -157,36 +157,185 @@ class Trackingmonster(object):
     def __init__(self, pos, dx, dy):
         trackingmonsters.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
+        # print(pos[0],pos[1])
         self.dx = dx
         self.dy = dy
+        self.freedirection = []
+        self.statelist = []
+        self.counter = 0
+        self.direction = -1
+        self.num = 1
+        self.prePosx = self.rect.x
+        self.prePosy = self.rect.y
+
+    def makebehaviourlist(self):  # create new behavior
+        self.statelist = []
+        self.xSquare = (self.rect.x // 32)
+        self.ySquare = (self.rect.y // 32)
+        # print(self.xSquare,self.ySquare)
+        if level[self.ySquare + 1][self.xSquare] != "W":
+            self.direction = DOWN  # Moving down
+            self.freedirection.append(self.direction)
+        if level[self.ySquare][self.xSquare + 1] != "W":
+            self.direction = RIGHT  # Moving right
+            self.freedirection.append(self.direction)
+        if level[self.ySquare - 1][self.xSquare] != "W":
+            self.direction = UP  # Moving up
+            self.freedirection.append(self.direction)
+        if level[self.ySquare][self.xSquare - 1] != "W":
+            self.direction = LEFT  # Moving left
+            self.freedirection.append(self.direction)
+        # print(self.freedirection)
+        number = random.randint(0, len(self.freedirection) - 1)
+        self.statelist.append(self.freedirection[number])
+        self.direction = self.statelist[0]
+        dir = self.direction
+        self.calculatedistance()
+        self.num = random.randint(1, self.num)
+        # print("previous",self.num)
+        # print(self.rect.x,self.rect.y)
+        if self.rect.x % 32 == 0 and self.rect.y % 32 == 16:  # block bottom left
+            if dir == RIGHT or dir == UP:
+                self.num = self.num + 0.5
+            if dir == LEFT or dir == DOWN:
+                self.num = self.num
+        if self.rect.x % 32 == 0 and self.rect.y % 32 == 0:  # block top left
+            if dir == RIGHT or dir == DOWN:
+                self.num = self.num + 0.5
+            if dir == LEFT or dir == UP:
+                self.num = self.num
+        if self.rect.x % 32 == 16 and self.rect.y % 32 == 0:  # block top right
+            if dir == LEFT or dir == DOWN:
+                self.num = self.num + 0.5
+            if dir == RIGHT or dir == UP:
+                self.num = self.num
+        if self.rect.x % 32 == 16 and self.rect.y % 32 == 16:  # block bottom right
+            if dir == LEFT or dir == UP:
+                self.num = self.num + 0.5
+            if dir == RIGHT or dir == DOWN:
+                self.num = self.num
+        # print("after", self.num)
+        self.statelist.append(16 * self.num)
+        # print(self.statelist)
+        self.freedirection = []
+        self.num = 1
+        self.counter = self.statelist[1]
+        # print((self.direction))
+
+    def makebehaviourlistkeyboard(self, dir):  # create new behavior
+        self.statelist = []
+        self.xSquare = (self.rect.x // 32)
+        self.ySquare = (self.rect.y // 32)
+
+        # print(self.xSquare,self.ySquare)
+
+        self.direction = dir
+
+        # print(self.freedirection)
+        # number = random.randint(0,len(self.freedirection)-1)
+        self.statelist.append(self.direction)
+        # print("Here",self.rect.topleft)
+        # self.direction = self.statelist[0]
+        self.calculatedistance()
+        print("previous:", self.num)
+        if self.rect.x % 32 == 0 and self.rect.y % 32 == 16:  # block bottom left
+            if dir == RIGHT or dir == UP:
+                self.num = self.num + 0.5
+            if dir == LEFT or dir == DOWN:
+                self.num = self.num
+        if self.rect.x % 32 == 0 and self.rect.y % 32 == 0:  # block top left
+            if dir == RIGHT or dir == DOWN:
+                self.num = self.num + 0.5
+            if dir == LEFT or dir == UP:
+                self.num = self.num
+        if self.rect.x % 32 == 16 and self.rect.y % 32 == 0:  # block top right
+            if dir == LEFT or dir == DOWN:
+                self.num = self.num + 0.5
+            if dir == RIGHT or dir == UP:
+                self.num = self.num
+        if self.rect.x % 32 == 16 and self.rect.y % 32 == 16:  # block bottom right
+            if dir == LEFT or dir == UP:
+                self.num = self.num + 0.5
+            if dir == RIGHT or dir == DOWN:
+                self.num = self.num
+
+        # if self.rect.x % 32 == 16:
+        # self.num = self.num * 2
+        # if self.rect.y % 32 == 0:
+        # self.num = self.num * 2 + 1
+        # if self.rect.y % 32 == 16:
+        # self.num = self.num * 2
+
+        print(self.num)
+
+        self.statelist.append(16 * self.num)
+        self.prePosx = self.rect.x
+        self.prePosy = self.rect.y
+
+        # print("statelist",self.statelist)
+
+        self.freedirection = []
+        self.num = 1  # must be 1
+        self.counter = self.statelist[1]
+
+    def calculatedistance(self):
+        # print("pos",self.ySquare,self.xSquare)
+        if self.direction == DOWN:
+            while level[self.ySquare + self.num][self.xSquare] != "W":
+                self.num += 1
+
+        if self.direction == RIGHT:
+            while level[self.ySquare][self.xSquare + self.num] != "W":
+                self.num += 1
+
+        if self.direction == UP:
+            while level[self.ySquare - self.num][self.xSquare] != "W":
+                self.num += 1
+
+        if self.direction == LEFT:
+            while level[self.ySquare][self.xSquare - self.num] != "W":
+                self.num += 1
+
+        self.num -= 1
+    def move(self):
+
+        #if self.counter != 0:
+            if self.direction == LEFT:
+                self.moveleft(self.dx, self.dy)
+                #self.counter -= 1
+                # print("left")
+                # print(self.counter)
+            if self.direction == RIGHT:
+                self.moveright(self.dx, self.dy)
+                #self.counter -= 1
+                # print("right")
+                # print(self.counter)
+            if self.direction == UP:
+                self.moveup(self.dx, self.dy)
+                #self.counter -= 1
+                # print("up")
+                # print(self.counter)
+            if self.direction == DOWN:
+                self.movedown(self.dx, self.dy)
+                #self.counter -= 1
+                # print("down")
+                # print(self.counter)
+            #if self.counter == 0:
+                # print(self.statelist)
+                self.makebehaviourlist()
+                #self.counter = self.statelist[1]
 
     def moveright(self, dx, dy):
         self.rect.x += dx
-        for wall in walls:
-            if self.rect.colliderect(wall.rect):
-                # if dx > 0:  # Moving right; Hit the left side of the wall
-                self.rect.right = wall.rect.left
 
     def moveleft(self, dx, dy):
         self.rect.x -= dx
-        for wall in walls:
-            if self.rect.colliderect(wall.rect):
-                # if dx < 0:  # Moving left; Hit the right side of the wall
-                self.rect.left = wall.rect.right
 
     def moveup(self, dx, dy):
         self.rect.y -= dy
-        for wall in walls:
-            if self.rect.colliderect(wall.rect):
-                if dy < 0:  # Moving up; Hit the bottom side of the wall
-                    self.rect.top = wall.rect.bottom
 
     def movedown(self, dx, dy):
         self.rect.y += dy
-        for wall in walls:
-            if self.rect.colliderect(wall.rect):
-                if dy > 0:  # Moving down; Hit the top side of the wall
-                    self.rect.bottom = wall.rect.top
 
 
 class RandomMonster(object):
@@ -500,11 +649,13 @@ for row in level:
             behavelist1 = ['left', 60, 'up', 60, 'down', 60, 'right', 60]
             squaremonsters.append(SquareMonster((x, y + 16), 3, 2, behavelist1))
         if col == "T":
-            trackingmonsters.append(Trackingmonster((x, y + 16), 1, 1))
+            temp2 = Trackingmonster([x, y + 16], 2, 2)
+            temp2.makebehaviourlist()
+            trackingmonsters.append(temp2)
         if col == "R":
-            temp = RandomMonster([x, y + 16], 2, 2)
-            temp.makebehaviourlist()
-            randommonsters.append(temp)
+            temp1 = RandomMonster([x, y + 16], 2, 2)
+            temp1.makebehaviourlist()
+            randommonsters.append(temp1)
 
         x += 32
     y += 32
@@ -522,7 +673,7 @@ while running:
             running = False
 
         if e.type == pygame.KEYUP:
-            monster = randommonsters[0]
+            monster = trackingmonsters[0]
             if e.key == pygame.K_a:
                 monster.makebehaviourlistkeyboard(LEFT)
             if e.key == pygame.K_d:
@@ -569,14 +720,7 @@ while running:
 
     for trackingmonster in trackingmonsters:
         pygame.draw.rect(screen, (150, 150, 255), trackingmonster.rect)
-        if player.rect.left < trackingmonster.rect.left:
-            trackingmonster.moveleft(trackingmonster.dx, trackingmonster.dy)
-        if player.rect.right > trackingmonster.rect.right:
-            trackingmonster.moveright(trackingmonster.dx, trackingmonster.dy)
-        if player.rect.top > trackingmonster.rect.top:
-            trackingmonster.movedown(trackingmonster.dx, trackingmonster.dy)
-        if player.rect.bottom < trackingmonster.rect.bottom:
-            trackingmonster.moveup(trackingmonster.dx, trackingmonster.dy)
+        trackingmonster.move()
 
     for randommonster in randommonsters:
         pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
