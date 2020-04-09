@@ -6,6 +6,8 @@ UP = 0
 RIGHT = 1
 DOWN = 2
 LEFT = 3
+STARTX =32
+STARTY = 432
 
 class Player(object):
 
@@ -40,31 +42,7 @@ class Player(object):
                 if dy < 0:  # Moving up; Hit the bottom side of the wall
                     self.rect.top = wall.rect.bottom
 
-        for spike in spikes:
-            if self.rect.colliderect(spike.rect):
-                self.rect.left = 32
-                self.rect.top = 432
-                player.status = False
-        for flyingspike in flyingspikes:
-            if self.rect.colliderect(flyingspike.rect):
-                self.rect.left = 32
-                self.rect.top = 432
-                player.status = False
-        for squaremonster in squaremonsters:
-            if self.rect.colliderect(squaremonster.rect):
-                self.rect.left = 32
-                self.rect.top = 432
-                player.status = False
-        for trackingmonster in trackingmonsters:
-            if self.rect.colliderect(trackingmonster.rect):
-                self.rect.left = 32
-                self.rect.top = 432
-                player.status = False
-        for randommonster in randommonsters:
-            if self.rect.colliderect(randommonster.rect):
-                self.rect.left = 32
-                self.rect.top = 432
-                player.status = False
+
 
     def drawborder(self, screen):
         left = self.rect.x
@@ -184,14 +162,14 @@ class Trackingmonster(object):
         self.rect.x += dx
         for wall in walls:
             if self.rect.colliderect(wall.rect):
-                if dx > 0:  # Moving right; Hit the left side of the wall
+                #if dx > 0:  # Moving right; Hit the left side of the wall
                     self.rect.right = wall.rect.left
 
     def moveleft(self,dx,dy):
         self.rect.x -= dx
         for wall in walls:
             if self.rect.colliderect(wall.rect):
-                if dx < 0:  # Moving left; Hit the right side of the wall
+                #if dx < 0:  # Moving left; Hit the right side of the wall
                     self.rect.left = wall.rect.right
 
     def moveup(self,dx,dy):
@@ -487,19 +465,19 @@ behavelist2 = []
 # Holds the level layout in a list of strings.
 level = [
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-    "W                                      W",
-    "W    R    WWWWWW   WWW    WWWW  WWWWW  W",
+    "W                          T           W",
+    "W         WWWWWW   WWW    WWWW  WWWWW  W",
     "W   WWWW       W   W   WWWW       W    W",
-    "W T W        WWWW  W  WW    W    WW    W",
+    "W   W        WWWW  W  WW    W    WW    W",
     "W WWW  WWWW        WW  W  W WW         W",
-    "W   W     W W   R  W   W  W    WWW   WWW",
+    "W   W     W W      W   W  W    WWW   WWW",
     "W   W     W W W WWWW   W  W WW W       W",
     "W   WWW WWW W W W  WWW W WWw W W     W W",
     "W     W   W   W        W     W WWWWWWW W",
     "WWW   W   WW WW WWWWW WWWWW    W       W",
     "W W    F  M     W   W W   WWWWWW   WWWWW",
     "W W   WWWWWWWWWWW W WWW W   W          W",
-    "W  F  WE    S     W     W      R  F    W",
+    "W  F  WE    S     W     W         F    W",
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
 ]
 
@@ -608,9 +586,28 @@ while running:
         #randommonster.drawpath()
 
 
+    for spike in spikes:
+        if player.rect.colliderect(spike.rect):
+            player.status = False
+    for flyingspike in flyingspikes:
+        if player.rect.colliderect(flyingspike.rect):
+            player.status = False
+    for squaremonster in squaremonsters:
+        if player.rect.colliderect(squaremonster.rect):
+            player.status = False
+    for trackingmonster in trackingmonsters:
+        if player.rect.colliderect(trackingmonster.rect):
+            player.status = False
+    for randommonster in randommonsters:
+        if player.rect.colliderect(randommonster.rect):
+            player.status = False
+
+
     if player.status == True:
         pygame.draw.rect(screen, (255, 200, 0), player.rect)
     elif player.status == False:
+        player.rect.left = 32
+        player.rect.top = 432
         #print("dead")
         player.flashcounter= player.flashcounter -1
         if player.flashcounter % 2 == 1:
