@@ -466,9 +466,9 @@ behavelist2 = []
 level = [
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
     "W                          T           W",
-    "W         WWWWWW   WWW    WWWW  WWWWW  W",
+    "W   R     WWWWWW   WWW    WWWW  WWWWW  W",
     "W   WWWW       W   W   WWWW       W    W",
-    "W   W        WWWW  W  WW    W    WW    W",
+    "W   W  R     WWWW  W  WW    W    WW    W",
     "W WWW  WWWW        WW  W  W WW         W",
     "W   W     W W      W   W  W    WWW   WWW",
     "W   W     W W W WWWW   W  W WW W       W",
