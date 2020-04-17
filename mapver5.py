@@ -673,8 +673,14 @@ for row in level:
 KEY_PRESSED = False
 running = True
 Playerdraw = False
-while level[(STARTY - 16) // 32][STARTX // 32] == "w":
+yPos = (STARTY - 16)//32
+xPos = STARTX//32
+while level[yPos][xPos] == "W":
     STARTY = STARTY - 32
+    yPos = (STARTY - 16)//32
+
+player.rect.x = STARTX
+player.rect.y = STARTY
 
 
 while running:
@@ -774,8 +780,8 @@ while running:
             player.status = True
             player.flashcounter = 10
     player.drawborder(screen)
-    print("HERE", STARTX, STARTY)
-    print(level[(STARTY + 16) // 32][STARTX // 32])
+    #print("HERE", STARTX, STARTY)
+    #print(level[(STARTY + 16) // 32][STARTX // 32])
     # print(player.flashcounter)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)  # exit color
     # drawGrid()
