@@ -12,6 +12,5 @@ class room():
     def addCell(self, row, col):
         self.cells.append((row, col))
 
-class roombig():
 
 
