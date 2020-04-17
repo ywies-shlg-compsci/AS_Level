@@ -1,6 +1,7 @@
 import os
 import pygame
 import random
+import makingmaze_version3 as makingmaze
 
 UP = 0
 RIGHT = 1
@@ -13,7 +14,7 @@ STARTY = 432
 class Player(object):
 
     def __init__(self):
-        self.rect = pygame.Rect(32, 432, 16, 16)
+        self.rect = pygame.Rect(STARTX, STARTY, 16, 16)
         self.status = True
         self.flashcounter = 10
 
@@ -594,6 +595,11 @@ def drawGrid():
 
     pygame.draw.lines(screen, (255, 0, 0), False, points, 1)
 
+def replace_C(s, index, character):
+    #newLevel[0] = newLevel[0][:2] + "E" + newLevel[0][2+1:]
+    s = s[:index] + character + s[index+1:]
+    return s
+
 
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -615,23 +621,27 @@ behavelist1 = []
 behavelist2 = []
 
 # Holds the level layout in a list of strings.
-level = [
-    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-    "W                          T           W",
-    "W         WWWWWW   WWW    WWWW  WWWWW  W",
-    "W   WWWW       W   W   WWWW       W    W",
-    "W   W        WWWW  W  WW    W    WW    W",
-    "W WWW  WWWW        WW  W  W WW         W",
-    "W   W     W W      W   W  W    WWW   WWW",
-    "W   W     W W W WWWW   W  W WW W       W",
-    "W   WWW WWW W W W  WWW W WWw W W     W W",
-    "W     W   W   W        W     W WWWWWWW W",
-    "WWW   W   WW WW WWWWW WWWWW    W       W",
-    "W W    F  M     W   W W   WWWWWW   WWWWW",
-    "W W   WWWWWWWWWWW W WWW W   W          W",
-    "W  F  WE    S     W     W         F    W",
-    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-]
+#level = [
+    #"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    #"W                          T           W",
+    #"W         WWWWWW   WWW    WWWW  WWWWW  W",
+    #"W   WWWW       W   W   WWWW       W    W",
+    #"W   W        WWWW  W  WW    W    WW    W",
+    #"W WWW  WWWW        WW  W  W WW         W",
+    #"W   W     W W      W   W  W    WWW   WWW",
+    #"W   W     W W W WWWW   W  W WW W       W",
+    #"W   WWW WWW W W W  WWW W WWw W W     W W",
+    #"W     W   W   W        W     W WWWWWWW W",
+    #"WWW   W   WW WW WWWWW WWWWW    W       W",
+    #"W W    F  M     W   W W   WWWWWW   WWWWW",
+    #"W W   WWWWWWWWWWW W WWW W   W          W",
+    #"W  F  WE    S     W     W         F    W",
+    #"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+
+level = makingmaze.createNewMazeWithRooms()
+level[2] = replace_C (level[2], 2 , "R")
+
+
 
 # Parse the level string above. W = wall, E = exit
 x = y = 0
@@ -648,10 +658,10 @@ for row in level:
         if col == "M":
             behavelist1 = ['left', 60, 'up', 60, 'down', 60, 'right', 60]
             squaremonsters.append(SquareMonster((x, y + 16), 3, 2, behavelist1))
-        if col == "T":
-            temp2 = Trackingmonster([x, y + 16], 2, 2)
-            temp2.makebehaviourlist()
-            trackingmonsters.append(temp2)
+        #if col == "T":
+            #temp2 = Trackingmonster([x, y + 16], 2, 2)
+            #temp2.makebehaviourlist()
+            #trackingmonsters.append(temp2)
         if col == "R":
             temp1 = RandomMonster([x, y + 16], 2, 2)
             temp1.makebehaviourlist()
@@ -662,26 +672,34 @@ for row in level:
     x = 0
 KEY_PRESSED = False
 running = True
+Playerdraw = False
+while level[(STARTY - 16) // 32][STARTX // 32] == "w":
+    STARTY = STARTY - 32
+
+
 while running:
     v = 8
     clock.tick(120)
 
+
+
     for e in pygame.event.get():  # quit function
+
         if e.type == pygame.QUIT:
             running = False
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
             running = False
 
-        if e.type == pygame.KEYUP:
-            monster = trackingmonsters[0]
-            if e.key == pygame.K_a:
-                monster.makebehaviourlistkeyboard(LEFT)
-            if e.key == pygame.K_d:
-                monster.makebehaviourlistkeyboard(RIGHT)
-            if e.key == pygame.K_w:
-                monster.makebehaviourlistkeyboard(UP)
-            if e.key == pygame.K_s:
-                monster.makebehaviourlistkeyboard(DOWN)
+        #if e.type == pygame.KEYUP:
+            #monster = trackingmonsters[0]
+            #if e.key == pygame.K_a:
+                #monster.makebehaviourlistkeyboard(LEFT)
+            #if e.key == pygame.K_d:
+                #monster.makebehaviourlistkeyboard(RIGHT)
+            #if e.key == pygame.K_w:
+                #monster.makebehaviourlistkeyboard(UP)
+            #if e.key == pygame.K_s:
+                #monster.makebehaviourlistkeyboard(DOWN)
 
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
@@ -746,8 +764,8 @@ while running:
     if player.status == True:
         pygame.draw.rect(screen, (255, 200, 0), player.rect)
     elif player.status == False:
-        player.rect.left = 32
-        player.rect.top = 432
+        player.rect.left = STARTX
+        player.rect.top = STARTY
         # print("dead")
         player.flashcounter = player.flashcounter - 1
         if player.flashcounter % 2 == 1:
@@ -756,6 +774,8 @@ while running:
             player.status = True
             player.flashcounter = 10
     player.drawborder(screen)
+    print("HERE", STARTX, STARTY)
+    print(level[(STARTY + 16) // 32][STARTX // 32])
     # print(player.flashcounter)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)  # exit color
     # drawGrid()
