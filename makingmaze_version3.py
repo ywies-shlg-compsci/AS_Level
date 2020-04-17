@@ -25,10 +25,10 @@ class room:
     def setNeighbours(self, neighbours):
         self.neighbours = neighbours
 
-    def printNeighbour(self):
-        print("Number of Neighbours: ", len(self.neighbours))
-        for node in self.neighbours:
-            print("X Pos: ", node.xPos, "Y Pos: ", node.yPos)
+    #def printNeighbour(self):
+        #print("Number of Neighbours: ", len(self.neighbours))
+        #for node in self.neighbours:
+            #print("X Pos: ", node.xPos, "Y Pos: ", node.yPos)
 
 iSize = 15
 jSize = 41
@@ -47,10 +47,10 @@ def printRoom(room):
     rows = len(room)
     col = len(room[0])
 
-    for i in range(0 , rows):
-        for j in range(0 , col):
-            print( room[i][j].name, end = '')
-        print()
+    #for i in range(0 , rows):
+        #for j in range(0 , col):
+            #print( room[i][j].name, end = '')
+        #print()
 def initializeMazeWithRooms(maze):
     finished = False
     for i in range(iSize):
@@ -79,7 +79,7 @@ def initializeMazeWithRooms(maze):
 
                      #now pick a room size ... -for now just 2 x 2 and place it in the current position
                     roomIndex = random.randint(0,len(allRooms)-1)
-                    print("room in: " , roomIndex)
+                    #print("room in: " , roomIndex)
                     choosenRoom = allRooms[roomIndex]
 
                     maxRoomRowLen = len(choosenRoom)
@@ -94,13 +94,13 @@ def initializeMazeWithRooms(maze):
                         choosenRoom = allRooms[roomIndex]
                         maxRoomRowLen = len(choosenRoom)
                         maxRoomColLen = len(choosenRoom[0])
-                        print("can't fit room")
+                        #print("can't fit room")
                         # safety
                         if negative < 0:
                             choosenRoom = room1x1
                             maxRoomRowLen = len(choosenRoom)
                             maxRoomColLen = len(choosenRoom[0])
-                            print("neagtive = 0")
+                            #print("neagtive = 0")
                             break
 
                     room = cell(i,j,maxRoomRowLen,maxRoomColLen,0,0,"R")
@@ -109,7 +109,7 @@ def initializeMazeWithRooms(maze):
                         for roomCol in (range(-1, maxRoomColLen + 1  )):
 
                             if roomRow == -1 or roomCol == -1 or roomRow == (maxRoomRowLen )  or roomCol== (maxRoomColLen):
-                                print("row: " , roomRow + i, " col: ", roomCol + j)
+                                #print("row: " , roomRow + i, " col: ", roomCol + j)
                                 if maze[i + roomRow][j + roomCol] == ' ':
                                     #maze[i + roomRow][j + roomCol] = 'W'
                                     wall = cell(i,j,1,1,0,0,"W")
@@ -295,7 +295,7 @@ def visitNodeAdvanced(currentRoom,maze,n):
     #return maze
     for neighbour in currentRoom.neighbours:
         if neighbour.visited == False:
-            print("neighbour #: ", len(currentRoom.neighbours))
+            #print("neighbour #: ", len(currentRoom.neighbours))
             #randomcell = neighbour.cells[0]  # a neighbour should have at least one cell
             #adjacentCells = findAdjacentCells(currentRoom.cells, neighbour.cells)
             adjacentCells = []
@@ -320,7 +320,7 @@ def visitNodeAdvanced(currentRoom,maze,n):
 
             maze[adjacentCells[choice][0]][adjacentCells[choice][1]].name = "H"
             n += 1
-            print("recurse: ", n)
+            #print("recurse: ", n)
             maze = visitNodeAdvanced(neighbour, maze, n)
     return maze
 def visitNode(currentRoom, maze):
@@ -368,7 +368,7 @@ def createNewMazeWithRooms():
     maze = buildNeighboursBigRoom(maze)
     n = 0
     maze = visitNodeAdvanced(maze[1][1], maze, n)
-    printMazeWithRooms(maze)
+    #printMazeWithRooms(maze)
 
     #construct level:
     newLevel = []
@@ -383,7 +383,7 @@ def createNewMazeWithRooms():
                     line += maze[i][j].name
         newLevel.append(line)
         line = ""
-    print(newLevel)
+    #print(newLevel)
     return newLevel
 def createNewMaze():
 
@@ -392,7 +392,7 @@ def createNewMaze():
     maze = buildNeighbours(maze)
     maze = visitNode(maze[1][1], maze)
 
-    printMaze(maze)
+    #printMaze(maze)
     #maze = biggermaze(maze)
     #construct level:
     newLevel = []
@@ -413,4 +413,4 @@ def createNewMaze():
     return newLevel
 
 #createNewMaze()
-createNewMazeWithRooms()
+#createNewMazeWithRooms()
