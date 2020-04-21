@@ -31,7 +31,7 @@ class room:
             #print("X Pos: ", node.xPos, "Y Pos: ", node.yPos)
 
 iSize = 15
-jSize = 41
+jSize = 40
 room1x1 = ["R"]
 room2x2 = [ ["R", "R"],["R", "R"]]
 room3x3 = [ ["R", "R", "R"],["R", "R", "R"], ["R", "R", "R"]]
