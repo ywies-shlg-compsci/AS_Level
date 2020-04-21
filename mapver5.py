@@ -10,17 +10,30 @@ LEFT = 3
 STARTX = 32
 STARTY = 432
 
+P_SIZE =16
 
 class Player(object):
 
     def __init__(self):
-        self.rect = pygame.Rect(STARTX, STARTY, 16, 16)
+        self.rect = pygame.Rect(STARTX, STARTY, P_SIZE, P_SIZE)
         self.status = True
         self.flashcounter = 10
         self.image = pygame.image.load('mm_04.png')
+        self.image_r_1 = pygame.transform.scale(pygame.image.load('mm_01.png'), (P_SIZE, P_SIZE))
+        self.image_r_2 = pygame.transform.scale(pygame.image.load('mm_02.png'), (P_SIZE, P_SIZE))
+        self.image_r_3 = pygame.transform.scale(pygame.image.load('mm_03.png'), (P_SIZE, P_SIZE))
+        self.image_r_4 = pygame.transform.scale(pygame.image.load('mm_04.png'), (P_SIZE, P_SIZE))
+        self.image_l_1 = pygame.transform.scale(pygame.image.load('mm_01_l.png'), (P_SIZE, P_SIZE))
+        self.image_l_2 = pygame.transform.scale(pygame.image.load('mm_02_l.png'), (P_SIZE, P_SIZE))
+        self.image_l_3 = pygame.transform.scale(pygame.image.load('mm_03_l.png'), (P_SIZE, P_SIZE))
+        self.image_l_4 = pygame.transform.scale(pygame.image.load('mm_04_l.png'), (P_SIZE, P_SIZE))
+        self.animateMoveRight = [self.image_r_1, self.image_r_2, self.image_r_3, self.image_r_4]
+        self.animateMoveLeft = [self.image_l_1, self.image_l_2, self.image_l_3, self.image_l_4]
+        self.ismove = False
+        self.frame = 0
 
     def draw(self):
-
+        screen.blit(self.animateMoveRight[3], (self.rect.x, self.rect.y))
 
     def move(self, dx, dy):
 
@@ -772,7 +785,8 @@ while running:
             player.status = False
 
     if player.status == True:
-        pygame.draw.rect(screen, (255, 200, 0), player.rect)
+        #pygame.draw.rect(screen, (255, 200, 0), player.rect)
+        player.draw()
     elif player.status == False:
         player.rect.left = STARTX
         player.rect.top = STARTY
