@@ -17,6 +17,10 @@ class Player(object):
         self.rect = pygame.Rect(STARTX, STARTY, 16, 16)
         self.status = True
         self.flashcounter = 10
+        self.image = pygame.image.load('mm_04.png')
+
+    def draw(self):
+
 
     def move(self, dx, dy):
 
