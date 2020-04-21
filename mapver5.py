@@ -687,6 +687,7 @@ for row in level:
         x += 32
     y += 32
     x = 0
+
 KEY_PRESSED = False
 running = True
 Playerdraw = False
