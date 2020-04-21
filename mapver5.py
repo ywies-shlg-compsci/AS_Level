@@ -32,8 +32,14 @@ class Player(object):
         self.ismove = False
         self.frame = 0
 
-    def draw(self):
+    def drawright(self):
+
         screen.blit(self.animateMoveRight[3], (self.rect.x, self.rect.y))
+
+    def drawleft(self):
+
+        screen.blit(self.animateMoveLeft[3], (self.rect.x, self.rect.y))
+
 
     def move(self, dx, dy):
 
@@ -657,6 +663,7 @@ behavelist2 = []
 
 level = makingmaze.createNewMazeWithRooms()
 level[2] = replace_C (level[2], 2 , "R")
+level[7] = replace_C (level[7], 28 , "R")
 
 
 
@@ -691,6 +698,7 @@ for row in level:
 KEY_PRESSED = False
 running = True
 Playerdraw = False
+Flag = 0
 yPos = (STARTY - 16)//32
 xPos = STARTX//32
 while level[yPos][xPos] == "W":
@@ -787,18 +795,33 @@ while running:
 
     if player.status == True:
         #pygame.draw.rect(screen, (255, 200, 0), player.rect)
-        player.draw()
+        if Flag == 0:
+            if key[pygame.K_LEFT]:
+                player.drawleft()
+                Flag = 1
+            else:
+                player.drawright()
+        if Flag == 1:
+            if key[pygame.K_RIGHT]:
+                player.drawright()
+                Flag = 0
+            else:
+                player.drawleft()
+
+
+
     elif player.status == False:
         player.rect.left = STARTX
         player.rect.top = STARTY
         # print("dead")
         player.flashcounter = player.flashcounter - 1
         if player.flashcounter % 2 == 1:
-            pygame.draw.rect(screen, (255, 200, 0), player.rect)
+            #pygame.draw.rect(screen, (255, 200, 0), player.rect)
+            player.drawright()
         elif player.flashcounter == 0:
             player.status = True
             player.flashcounter = 10
-    player.drawborder(screen)
+    #player.drawborder(screen)
     #print("HERE", STARTX, STARTY)
     #print(level[(STARTY + 16) // 32][STARTX // 32])
     # print(player.flashcounter)
