@@ -11,6 +11,18 @@ STARTX = 32
 STARTY = 432
 
 P_SIZE =16
+C_SIZE = 4
+
+class Coin(object):
+
+    def __init__(self,x,y):
+        coins.append(self)
+        self.rect = pygame.Rect(x, y,C_SIZE,C_SIZE)
+
+
+    def draw(self):
+        pygame.draw.circle(screen,(255,200,0),(x,y),C_SIZE)
+
 
 class Player(object):
 
@@ -639,7 +651,7 @@ flyingspikes = []
 squaremonsters = []
 trackingmonsters = []
 randommonsters = []
-
+coins = []
 behavelist1 = []
 behavelist2 = []
 
@@ -664,6 +676,7 @@ behavelist2 = []
 level = makingmaze.createNewMazeWithRooms()
 level[2] = replace_C (level[2], 2 , "R")
 level[7] = replace_C (level[7], 28 , "R")
+level[2] = replace_C(level[2],28,"C")
 
 
 
@@ -690,6 +703,8 @@ for row in level:
             temp1 = RandomMonster([x, y + 16], 2, 2)
             temp1.makebehaviourlist()
             randommonsters.append(temp1)
+        if col == "C":
+            Coin(x,y)
 
         x += 32
     y += 32
@@ -755,6 +770,26 @@ while running:
     screen.fill((0, 0, 0))  # background color
     for wall in walls:
         pygame.draw.rect(screen, (255, 255, 255), wall.rect)  # wall color
+    # create all the coins (before the game loop)
+    # make sure the coins ARE NOT in the wall
+    # put them in the map
+    # Loop through all the coins
+    # check to see if coins are touching the player see line 769 for example
+    # coin then is eatten by player (erase it somehow) - AFTER the loop
+
+    # that means coin class needs 'state' = 'eatten'
+    # change state of coin to 'eatten'
+    # player maybe has coin score... and if you are touched by enemy
+    # you only lose coins unless you don't have enough...
+
+    # Loop through all the coins
+    # if the coin is NOT eatten
+    # add that coin to a NEWcoinList
+    # coinList = NEWcoinList (all coins that haven't been eatten)
+    for coin in coins:
+        coin.draw()
+
+
     for spike in spikes:
         pygame.draw.rect(screen, (0, 255, 0), spike.rect)
     for flyingspike in flyingspikes:
