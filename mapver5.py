@@ -10,7 +10,7 @@ LEFT = 3
 STARTX = 32
 STARTY = 432
 
-P_SIZE =16
+P_SIZE = 16
 C_SIZE = 8
 
 class Coin(object):
@@ -819,7 +819,7 @@ while running:
         randommonster.move()
         # randommonster.drawpath()
     for coin in coinslist:
-        if player.rect.collidepoint(coin.rect.x+16, coin.rect.y+16) == True:
+        if player.rect.collidepoint(coin.rect.x, coin.rect.y) == True or player.rect.collidepoint(coin.rect.x+16, coin.rect.y) == True or player.rect.collidepoint(coin.rect.x, coin.rect.y+16) == True or player.rect.collidepoint(coin.rect.x+16, coin.rect.y+16) == True:
             coin.Delete =True
             CollectedCoin = CollectedCoin + 1
     newcoinlist = []
