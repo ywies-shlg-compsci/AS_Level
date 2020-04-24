@@ -11,7 +11,7 @@ STARTX = 32
 STARTY = 432
 
 P_SIZE =16
-C_SIZE = 4
+C_SIZE = 8
 
 class Coin(object):
 
@@ -19,9 +19,8 @@ class Coin(object):
         coins.append(self)
         self.rect = pygame.Rect(x, y,C_SIZE,C_SIZE)
 
-
     def draw(self):
-        pygame.draw.circle(screen,(255,200,0),(x,y),C_SIZE)
+        pygame.draw.circle(screen,(255,200,0),(self.rect.x,self.rect.y),C_SIZE)
 
 
 class Player(object):
@@ -677,7 +676,7 @@ level = makingmaze.createNewMazeWithRooms()
 level[2] = replace_C (level[2], 2 , "R")
 level[7] = replace_C (level[7], 28 , "R")
 level[2] = replace_C(level[2],28,"C")
-
+level[5] = replace_C(level[5],38,"C")
 
 
 # Parse the level string above. W = wall, E = exit
@@ -788,6 +787,8 @@ while running:
     # coinList = NEWcoinList (all coins that haven't been eatten)
     for coin in coins:
         coin.draw()
+
+
 
 
     for spike in spikes:
