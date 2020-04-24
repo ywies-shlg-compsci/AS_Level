@@ -720,7 +720,7 @@ Flag = 0
 yPos = (STARTY - 16)//32
 xPos = STARTX//32
 CollectedCoin = 0
-newcoinlist = []
+
 while level[yPos][xPos] == "W":
     STARTY = STARTY - 32
     yPos = (STARTY - 16)//32
@@ -822,11 +822,13 @@ while running:
         if player.rect.collidepoint(coin.rect.x+16, coin.rect.y+16) == True:
             coin.Delete =True
             CollectedCoin = CollectedCoin + 1
+    newcoinlist = []
+    for coin in coinslist:
         if coin.Delete == False:
             newcoinlist.append(coin)
-            coinslist = newcoinlist
-
+    coinslist = newcoinlist
     print(CollectedCoin)
+    #print(len(coinslist))
 
 
     for spike in spikes:
