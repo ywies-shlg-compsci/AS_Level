@@ -16,8 +16,9 @@ C_SIZE = 8
 class Coin(object):
 
     def __init__(self,x,y):
-        coins.append(self)
+        coinslist.append(self)
         self.rect = pygame.Rect(x, y,C_SIZE,C_SIZE)
+        self.Delete = False
 
     def draw(self):
         pygame.draw.circle(screen,(255,200,0),(self.rect.x+16,self.rect.y+16),C_SIZE)
@@ -650,7 +651,7 @@ flyingspikes = []
 squaremonsters = []
 trackingmonsters = []
 randommonsters = []
-coins = []
+coinslist = []
 behavelist1 = []
 behavelist2 = []
 CoinNum = 6
@@ -719,6 +720,7 @@ Flag = 0
 yPos = (STARTY - 16)//32
 xPos = STARTX//32
 CollectedCoin = 0
+newcoinlist = []
 while level[yPos][xPos] == "W":
     STARTY = STARTY - 32
     yPos = (STARTY - 16)//32
@@ -789,7 +791,7 @@ while running:
     # if the coin is NOT eatten
     # add that coin to a NEWcoinList
     # coinList = NEWcoinList (all coins that haven't been eatten)
-    for coin in coins:
+    for coin in coinslist:
         coin.draw()
 
 
@@ -816,12 +818,15 @@ while running:
         pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
         randommonster.move()
         # randommonster.drawpath()
-    for coin in coins:
+    for coin in coinslist:
         if player.rect.collidepoint(coin.rect.x+16, coin.rect.y+16) == True:
-
+            coin.Delete =True
             CollectedCoin = CollectedCoin + 1
+        if not coin.Delete == False:
+            newcoinlist.append(coin)
+            coinslist = newcoinlist
 
-        print(CollectedCoin)
+    print(CollectedCoin)
 
 
     for spike in spikes:
