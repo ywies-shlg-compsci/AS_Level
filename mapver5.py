@@ -653,6 +653,7 @@ randommonsters = []
 coins = []
 behavelist1 = []
 behavelist2 = []
+CoinNum = 6
 
 # Holds the level layout in a list of strings.
 #level = [
@@ -675,7 +676,7 @@ behavelist2 = []
 level = makingmaze.createNewMazeWithRooms()
 level[2] = replace_C (level[2], 2 , "R")
 level[7] = replace_C (level[7], 28 , "R")
-for i in range(0,6):
+for i in range(0,CoinNum):
     RanX = random.randint(1,13)
     RanY = random.randint(1,38)
     level[RanX] = replace_C(level[RanX],RanY,"C")
@@ -717,6 +718,7 @@ Playerdraw = False
 Flag = 0
 yPos = (STARTY - 16)//32
 xPos = STARTX//32
+CollectedCoin = 0
 while level[yPos][xPos] == "W":
     STARTY = STARTY - 32
     yPos = (STARTY - 16)//32
@@ -814,6 +816,13 @@ while running:
         pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
         randommonster.move()
         # randommonster.drawpath()
+    for coin in coins:
+        if player.rect.collidepoint(coin.rect.x+16, coin.rect.y+16) == True:
+
+            CollectedCoin = CollectedCoin + 1
+
+        print(CollectedCoin)
+
 
     for spike in spikes:
         if player.rect.colliderect(spike.rect):
