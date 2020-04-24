@@ -20,7 +20,7 @@ class Coin(object):
         self.rect = pygame.Rect(x, y,C_SIZE,C_SIZE)
 
     def draw(self):
-        pygame.draw.circle(screen,(255,200,0),(self.rect.x,self.rect.y),C_SIZE)
+        pygame.draw.circle(screen,(255,200,0),(self.rect.x+16,self.rect.y+16),C_SIZE)
 
 
 class Player(object):
@@ -675,8 +675,10 @@ behavelist2 = []
 level = makingmaze.createNewMazeWithRooms()
 level[2] = replace_C (level[2], 2 , "R")
 level[7] = replace_C (level[7], 28 , "R")
-level[2] = replace_C(level[2],28,"C")
-level[5] = replace_C(level[5],38,"C")
+for i in range(0,6):
+    RanX = random.randint(1,13)
+    RanY = random.randint(1,38)
+    level[RanX] = replace_C(level[RanX],RanY,"C")
 
 
 # Parse the level string above. W = wall, E = exit
