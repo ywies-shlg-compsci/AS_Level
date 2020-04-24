@@ -822,7 +822,7 @@ while running:
         if player.rect.collidepoint(coin.rect.x+16, coin.rect.y+16) == True:
             coin.Delete =True
             CollectedCoin = CollectedCoin + 1
-        if not coin.Delete == False:
+        if coin.Delete == False:
             newcoinlist.append(coin)
             coinslist = newcoinlist
 
