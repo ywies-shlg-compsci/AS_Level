@@ -47,12 +47,10 @@ class Player(object):
         self.frame = 0
 
     def drawright(self):
-
-        screen.blit(self.animateMoveRight[3], (self.rect.x, self.rect.y))
+        screen.blit(self.animateMoveRight[animationindex], (self.rect.x, self.rect.y))
 
     def drawleft(self):
-
-        screen.blit(self.animateMoveLeft[3], (self.rect.x, self.rect.y))
+        screen.blit(self.animateMoveLeft[animationindex], (self.rect.x, self.rect.y))
 
 
     def move(self, dx, dy):
@@ -722,7 +720,7 @@ Flag = 0
 yPos = (STARTY - 16)//32
 xPos = STARTX//32
 CollectedCoin = 0
-
+animationindex = 0
 while level[yPos][xPos] == "W":
     STARTY = STARTY - 32
     yPos = (STARTY - 16)//32
@@ -796,11 +794,9 @@ while running:
     for coin in coinslist:
         coin.draw()
 
-
-
-
     for spike in spikes:
         pygame.draw.rect(screen, (0, 255, 0), spike.rect)
+
     for flyingspike in flyingspikes:
         pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
         flyingspike.triggerActive(player, KEY_PRESSED)
@@ -829,9 +825,10 @@ while running:
         if coin.Delete == False:
             newcoinlist.append(coin)
     coinslist = newcoinlist
+
+
     print(CollectedCoin)
     #print(len(coinslist))
-
 
     for spike in spikes:
         if player.rect.colliderect(spike.rect):
@@ -856,6 +853,7 @@ while running:
                 player.drawleft()
                 Flag = 1
             else:
+
                 player.drawright()
         if Flag == 1:
             if key[pygame.K_RIGHT]:
@@ -863,6 +861,7 @@ while running:
                 Flag = 0
             else:
                 player.drawleft()
+
 
 
 
@@ -877,6 +876,11 @@ while running:
         elif player.flashcounter == 0:
             player.status = True
             player.flashcounter = 10
+    if animationindex < 3:
+        animationindex = animationindex + 1
+    elif animationindex == 3:
+        animationindex = 0
+
     #player.drawborder(screen)
     #print("HERE", STARTX, STARTY)
     #print(level[(STARTY + 16) // 32][STARTX // 32])
