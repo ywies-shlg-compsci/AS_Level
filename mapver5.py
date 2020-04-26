@@ -11,7 +11,7 @@ STARTX = 32
 STARTY = 432
 
 P_SIZE = 16
-C_SIZE = 8
+C_SIZE = 16
 
 class Coin(object):
 
@@ -20,9 +20,11 @@ class Coin(object):
         self.rect = pygame.Rect(x, y,C_SIZE,C_SIZE)
         self.Delete = False
 
-    def draw(self):
-        pygame.draw.circle(screen,(255,200,0),(self.rect.x+16,self.rect.y+16),C_SIZE)
+        self.image_coin = pygame.transform.scale(pygame.image.load('coin.png'), (C_SIZE, C_SIZE))
 
+    def draw(self):
+        #pygame.draw.circle(screen,(255,200,0),(self.rect.x+16,self.rect.y+16),C_SIZE)
+        screen.blit(self.image_coin, (self.rect.x, self.rect.y))
 
 class Player(object):
 
