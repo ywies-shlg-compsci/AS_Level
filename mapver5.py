@@ -13,6 +13,8 @@ STARTY = 432
 P_SIZE = 16
 C_SIZE = 16
 
+xPosition = 0
+yPosition = 0
 class Coin(object):
 
     def __init__(self,x,y):
@@ -92,18 +94,15 @@ class Player(object):
         points.append((left, top))
         pygame.draw.lines(screen, (0, 255, 255), False, points, 1)
 
-
 class Wall(object):
     def __init__(self, pos):
         walls.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 32, 32)
 
-
 class Spike(object):
     def __init__(self, pos):
         spikes.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
-
 
 class FlyingSpike(object):
     def __init__(self, pos):
@@ -118,7 +117,6 @@ class FlyingSpike(object):
         if (player.rect.right >= self.rect.left - 32 or player.rect.left - 32 >= self.rect.right) and key == True:
             self.trigger = True
             print("trigger")
-
 
 class SquareMonster(object):
     def __init__(self, pos, dx, dy, behavelist1):
@@ -187,7 +185,6 @@ class SquareMonster(object):
         points.append((left, bottom))
         points.append((left, top))
         pygame.draw.lines(screen, (0, 255, 255), False, points, 1)
-
 
 class Trackingmonster(object):
     def __init__(self, pos, dx, dy):
@@ -372,7 +369,6 @@ class Trackingmonster(object):
 
     def movedown(self, dx, dy):
         self.rect.y += dy
-
 
 class RandomMonster(object):
     def __init__(self, pos, dx, dy):
@@ -588,7 +584,6 @@ class RandomMonster(object):
     def movedown(self, dx, dy):
         self.rect.y += dy
 
-
 def drawGrid():
     points = []
     x = 0
@@ -650,7 +645,7 @@ def makingcoins(level):
 
 def CreateMonsterInMaze(level):
     # Parse the level string above. W = wall, E = exit
-    global end_rect
+    global end_rect, xPosition, yPosition
     x = y = 0
     for row in level:
         for col in row:
@@ -658,6 +653,8 @@ def CreateMonsterInMaze(level):
                 Wall((x, y))  # thw wall block
             if col == "E":
                 end_rect = pygame.Rect(x, y, 32, 32)  # the exit block
+                xPosition = x
+                yPosition = y
             if col == "F":
                 FlyingSpike((x, 650))
             if col == "S":
@@ -679,7 +676,7 @@ def CreateMonsterInMaze(level):
             x += 32
         y += 32
         x = 0
-    return end_rect
+    return end_rect,xPosition,yPosition
 
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -725,6 +722,7 @@ makingcoins(level)
 CreateMonsterInMaze(level)
 
 
+
 KEY_PRESSED = False
 running = True
 Playerdraw = False
@@ -739,6 +737,12 @@ while level[yPos][xPos] == "W":
 
 player.rect.x = STARTX
 player.rect.y = STARTY
+#print(level[13][37])
+#print(xPosition,yPosition)
+xIndex = xPosition//32
+yIndex = (yPosition+16)//32#position of the end_rect
+#print(yIndex,xIndex)
+
 
 
 while running:
@@ -901,6 +905,26 @@ while running:
     pygame.display.flip()  # update the contents of the entire display
     # pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
     if player.rect.colliderect(end_rect):
+        walls = []  # List to hold the walls
+        player = Player()
+        spikes = []
+        flyingspikes = []
+        squaremonsters = []
+        trackingmonsters = []
+        randommonsters = []
+        coinslist = []
+        behavelist1 = []
+        behavelist2 = []
+        CoinNum = CoinNum + 3
+        MonsterNum = MonsterNum + 2
+        level = makingmaze.createNewMazeWithRooms()
+        player.rect.left = STARTX
+        player.rect.top = STARTY
+        makingmonster(level)
+        makingcoins(level)
+        CreateMonsterInMaze(level)
+    if level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W":
+        print("error")
         walls = []  # List to hold the walls
         player = Player()
         spikes = []
