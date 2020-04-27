@@ -746,8 +746,28 @@ yIndex = (yPosition+16)//32#position of the end_rect
 
 
 while running:
-    v = 32
+    v = 8
     clock.tick(120)
+    if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W"):
+        print("error")
+        walls = []  # List to hold the walls
+        player = Player()
+        spikes = []
+        flyingspikes = []
+        squaremonsters = []
+        trackingmonsters = []
+        randommonsters = []
+        coinslist = []
+        behavelist1 = []
+        behavelist2 = []
+        CoinNum = CoinNum
+        MonsterNum = MonsterNum
+        level = makingmaze.createNewMazeWithRooms()
+        player.rect.left = STARTX
+        player.rect.top = STARTY
+        makingmonster(level)
+        makingcoins(level)
+        CreateMonsterInMaze(level)
 
 
 
@@ -923,23 +943,4 @@ while running:
         makingmonster(level)
         makingcoins(level)
         CreateMonsterInMaze(level)
-    if level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W":
-        print("error")
-        walls = []  # List to hold the walls
-        player = Player()
-        spikes = []
-        flyingspikes = []
-        squaremonsters = []
-        trackingmonsters = []
-        randommonsters = []
-        coinslist = []
-        behavelist1 = []
-        behavelist2 = []
-        CoinNum = CoinNum + 3
-        MonsterNum = MonsterNum + 2
-        level = makingmaze.createNewMazeWithRooms()
-        player.rect.left = STARTX
-        player.rect.top = STARTY
-        makingmonster(level)
-        makingcoins(level)
-        CreateMonsterInMaze(level)
+
