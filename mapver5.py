@@ -679,7 +679,7 @@ def CreateMonsterInMaze(level):
             x += 32
         y += 32
         x = 0
-        return end_rect
+    return end_rect
 
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -742,7 +742,7 @@ player.rect.y = STARTY
 
 
 while running:
-    v = 8
+    v = 32
     clock.tick(120)
 
 
@@ -904,6 +904,18 @@ while running:
     pygame.display.flip()  # update the contents of the entire display
     # pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
     if player.rect.colliderect(end_rect):
+        walls = []  # List to hold the walls
+        player = Player()
+        spikes = []
+        flyingspikes = []
+        squaremonsters = []
+        trackingmonsters = []
+        randommonsters = []
+        coinslist = []
+        behavelist1 = []
+        behavelist2 = []
+        CoinNum = 6
+        MonsterNum = 2
         level = makingmaze.createNewMazeWithRooms()
         player.rect.left = STARTX
         player.rect.top = STARTY
