@@ -635,6 +635,51 @@ def replace_C(s, index, character):
     s = s[:index] + character + s[index+1:]
     return s
 
+def makingmonster(level):
+    for i in range(0,MonsterNum):
+        RanX = random.randint(1, 13)
+        RanY = random.randint(1, 38)
+        level[RanX] = replace_C (level[RanX], RanY , "R")
+
+def makingcoins(level):
+    for i in range(0,CoinNum):
+        RanX = random.randint(1,13)
+        RanY = random.randint(1,38)
+        level[RanX] = replace_C(level[RanX],RanY,"C")
+
+
+def CreateMonsterInMaze(level):
+    # Parse the level string above. W = wall, E = exit
+    global end_rect
+    x = y = 0
+    for row in level:
+        for col in row:
+            if col == "W":
+                Wall((x, y))  # thw wall block
+            if col == "E":
+                end_rect = pygame.Rect(x, y, 32, 32)  # the exit block
+            if col == "F":
+                FlyingSpike((x, 650))
+            if col == "S":
+                Spike((x, y + 22))
+            if col == "M":
+                behavelist1 = ['left', 60, 'up', 60, 'down', 60, 'right', 60]
+                squaremonsters.append(SquareMonster((x, y + 16), 3, 2, behavelist1))
+            # if col == "T":
+            # temp2 = Trackingmonster([x, y + 16], 2, 2)
+            # temp2.makebehaviourlist()
+            # trackingmonsters.append(temp2)
+            if col == "R":
+                temp1 = RandomMonster([x, y + 16], 2, 2)
+                temp1.makebehaviourlist()
+                randommonsters.append(temp1)
+            if col == "C":
+                Coin(x, y)
+
+            x += 32
+        y += 32
+        x = 0
+        return end_rect
 
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -655,6 +700,7 @@ coinslist = []
 behavelist1 = []
 behavelist2 = []
 CoinNum = 6
+MonsterNum = 2
 
 # Holds the level layout in a list of strings.
 #level = [
@@ -673,45 +719,11 @@ CoinNum = 6
     #"W W   WWWWWWWWWWW W WWW W   W          W",
     #"W  F  WE    S     W     W         F    W",
     #"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-
 level = makingmaze.createNewMazeWithRooms()
-level[2] = replace_C (level[2], 2 , "R")
-level[7] = replace_C (level[7], 28 , "R")
-for i in range(0,CoinNum):
-    RanX = random.randint(1,13)
-    RanY = random.randint(1,38)
-    level[RanX] = replace_C(level[RanX],RanY,"C")
+makingmonster(level)
+makingcoins(level)
+CreateMonsterInMaze(level)
 
-
-# Parse the level string above. W = wall, E = exit
-x = y = 0
-for row in level:
-    for col in row:
-        if col == "W":
-            Wall((x, y))  # thw wall block
-        if col == "E":
-            end_rect = pygame.Rect(x, y, 32, 32)  # the exit block
-        if col == "F":
-            FlyingSpike((x, 650))
-        if col == "S":
-            Spike((x, y + 22))
-        if col == "M":
-            behavelist1 = ['left', 60, 'up', 60, 'down', 60, 'right', 60]
-            squaremonsters.append(SquareMonster((x, y + 16), 3, 2, behavelist1))
-        #if col == "T":
-            #temp2 = Trackingmonster([x, y + 16], 2, 2)
-            #temp2.makebehaviourlist()
-            #trackingmonsters.append(temp2)
-        if col == "R":
-            temp1 = RandomMonster([x, y + 16], 2, 2)
-            temp1.makebehaviourlist()
-            randommonsters.append(temp1)
-        if col == "C":
-            Coin(x,y)
-
-        x += 32
-    y += 32
-    x = 0
 
 KEY_PRESSED = False
 running = True
@@ -768,7 +780,8 @@ while running:
         KEY_PRESSED = True
 
     # Just added this to make it slightly fun ;)
-    if player.rect.colliderect(end_rect):
+    #if player.rect.colliderect(end_rect):
+    if key[pygame.K_p]:
         print("You win!")
         break
     # Draw the scene
@@ -890,3 +903,10 @@ while running:
 
     pygame.display.flip()  # update the contents of the entire display
     # pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
+    if player.rect.colliderect(end_rect):
+        level = makingmaze.createNewMazeWithRooms()
+        player.rect.left = STARTX
+        player.rect.top = STARTY
+        makingmonster(level)
+        makingcoins(level)
+        CreateMonsterInMaze(level)
