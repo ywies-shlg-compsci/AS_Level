@@ -875,9 +875,6 @@ while running:
             else:
                 player.drawleft()
 
-
-
-
     elif player.status == False:
         player.rect.left = STARTX
         player.rect.top = STARTY
@@ -914,8 +911,8 @@ while running:
         coinslist = []
         behavelist1 = []
         behavelist2 = []
-        CoinNum = 6
-        MonsterNum = 2
+        CoinNum = CoinNum + 2
+        MonsterNum = MonsterNum + 2
         level = makingmaze.createNewMazeWithRooms()
         player.rect.left = STARTX
         player.rect.top = STARTY
