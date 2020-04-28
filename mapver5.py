@@ -10,7 +10,9 @@ LEFT = 3
 STARTX = 32
 STARTY = 432
 
-black = (0,0,0)
+color = (0,0,0)
+red = (255,0,0)
+green = (0,255,0)
 
 P_SIZE = 16
 C_SIZE = 16
@@ -685,8 +687,9 @@ def CreateMonsterInMaze(level):
 
 def drawtext(window,content,x,y):
     font = pygame.font.SysFont('Arial', 40)
-    text = font.render(content,1,black)
+    text = font.render(content,1,color)
     window.blit(text,(x,y))
+
 
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -707,6 +710,7 @@ coinslist = []
 behavelist1 = []
 behavelist2 = []
 CoinNum = 6
+TotalCoinNum = CoinNum
 MonsterNum = 2
 
 # Holds the level layout in a list of strings.
@@ -757,7 +761,7 @@ yIndex = (yPosition+16)//32#position of the end_rect
 
 
 while running:
-    v = 8
+    v = 15
     clock.tick(120)
     if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W"):
         print("error")
@@ -883,8 +887,13 @@ while running:
             newcoinlist.append(coin)
     coinslist = newcoinlist
 
+    if CollectedCoin < TotalCoinNum :
+        color = red
+    else:
+        color = green
 
-    print(CollectedCoin)
+
+    #print(CollectedCoin)
     #print(len(coinslist))
 
     for spike in spikes:
@@ -958,6 +967,7 @@ while running:
         behavelist1 = []
         behavelist2 = []
         CoinNum = CoinNum + 3
+        TotalCoinNum = TotalCoinNum + CoinNum
         MonsterNum = MonsterNum + 2
         level = makingmaze.createNewMazeWithRooms()
         player.rect.left = STARTX
