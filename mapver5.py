@@ -103,6 +103,9 @@ class Wall(object):
     def __init__(self, pos):
         walls.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 32, 32)
+        self.image_wall = pygame.transform.scale(pygame.image.load('wall.png'), (32, 32))
+    def draw(self):
+        screen.blit(self.image_wall, (self.rect.x, self.rect.y))
 
 class Spike(object):
     def __init__(self, pos):
@@ -389,7 +392,7 @@ class RandomMonster(object):
         self.num = 1
         self.prePosx = self.rect.x
         self.prePosy = self.rect.y
-        self.image_monster = pygame.transform.scale(pygame.image.load('monster.png'), (C_SIZE, C_SIZE))
+        self.image_monster = pygame.transform.scale(pygame.image.load('monster.png'), (16, 16))
     def draw(self):
         screen.blit(self.image_monster, (self.rect.x, self.rect.y))
 
@@ -842,7 +845,8 @@ while running:
     # Draw the scene
     screen.fill((0, 0, 0))  # background color
     for wall in walls:
-        pygame.draw.rect(screen, (255, 255, 255), wall.rect)  # wall color
+        #pygame.draw.rect(screen, (255, 255, 255), wall.rect)  # wall color
+        wall.draw()
     # create all the coins (before the game loop)
     # make sure the coins ARE NOT in the wall
     # put them in the map
