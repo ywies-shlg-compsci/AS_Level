@@ -714,9 +714,9 @@ randommonsters = []
 coinslist = []
 behavelist1 = []
 behavelist2 = []
-CoinNum = 6
+CoinNum = 1
 TotalCoinNum = CoinNum
-MonsterNum = 2
+MonsterNum = 1
 
 levelNum = 1
 
@@ -983,9 +983,9 @@ while running:
             coinslist = []
             behavelist1 = []
             behavelist2 = []
-            CoinNum = CoinNum + 2
+            CoinNum = CoinNum + 1
             TotalCoinNum = TotalCoinNum + CoinNum
-            MonsterNum = MonsterNum + 3
+            MonsterNum = MonsterNum + 2
             levelNum = levelNum + 1
             level = makingmaze.createNewMazeWithRooms()
             player.rect.left = STARTX
