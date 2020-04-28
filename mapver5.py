@@ -956,31 +956,34 @@ while running:
     pygame.display.flip()  # update the contents of the entire display
     # pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
     if player.rect.colliderect(end_rect):
-        walls = []  # List to hold the walls
-        player = Player()
-        spikes = []
-        flyingspikes = []
-        squaremonsters = []
-        trackingmonsters = []
-        randommonsters = []
-        coinslist = []
-        behavelist1 = []
-        behavelist2 = []
-        CoinNum = CoinNum + 3
-        TotalCoinNum = TotalCoinNum + CoinNum
-        MonsterNum = MonsterNum + 2
-        level = makingmaze.createNewMazeWithRooms()
-        player.rect.left = STARTX
-        player.rect.top = STARTY
-        yPos = (STARTY - 16) // 32
-        xPos = STARTX // 32
-        while level[yPos][xPos] == "W":
-            STARTY = STARTY - 32
+        if CollectedCoin == TotalCoinNum:
+            walls = []  # List to hold the walls
+            player = Player()
+            spikes = []
+            flyingspikes = []
+            squaremonsters = []
+            trackingmonsters = []
+            randommonsters = []
+            coinslist = []
+            behavelist1 = []
+            behavelist2 = []
+            CoinNum = CoinNum + 3
+            TotalCoinNum = TotalCoinNum + CoinNum
+            MonsterNum = MonsterNum + 2
+            level = makingmaze.createNewMazeWithRooms()
+            player.rect.left = STARTX
+            player.rect.top = STARTY
             yPos = (STARTY - 16) // 32
+            xPos = STARTX // 32
+            while level[yPos][xPos] == "W":
+                STARTY = STARTY - 32
+                yPos = (STARTY - 16) // 32
 
-        player.rect.x = STARTX
-        player.rect.y = STARTY
-        makingmonster(level)
-        makingcoins(level)
-        CreateMonsterInMaze(level)
-
+            player.rect.x = STARTX
+            player.rect.y = STARTY
+            makingmonster(level)
+            makingcoins(level)
+            CreateMonsterInMaze(level)
+        else:
+            color = red
+            drawtext(screen, "Please collect all the coins!", 640, 0)
