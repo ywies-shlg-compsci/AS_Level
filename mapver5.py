@@ -771,7 +771,7 @@ yIndex = (yPosition+16)//32#position of the end_rect
 
 
 while running:
-    v = 15
+    v = 8
     clock.tick(120)
     if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W"):
         print("error")
@@ -824,6 +824,8 @@ while running:
                 #monster.makebehaviourlistkeyboard(DOWN)
 
     key = pygame.key.get_pressed()
+    if key[pygame.K_SPACE]:
+        v = 16
     if key[pygame.K_LEFT]:
         player.move(-v, 0)
         KEY_PRESSED = True
