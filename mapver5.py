@@ -11,6 +11,7 @@ STARTX = 32
 STARTY = 432
 
 color = (0,0,0)
+black = (0,0,0)
 red = (255,0,0)
 green = (0,255,0)
 
@@ -690,6 +691,10 @@ def drawtext(window,content,x,y):
     text = font.render(content,1,color)
     window.blit(text,(x,y))
 
+def drawtextblack(window,content,x,y):
+    font = pygame.font.SysFont('Arial', 40)
+    text = font.render(content,1,black)
+    window.blit(text,(x,y))
 
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -712,6 +717,8 @@ behavelist2 = []
 CoinNum = 6
 TotalCoinNum = CoinNum
 MonsterNum = 2
+
+levelNum = 1
 
 # Holds the level layout in a list of strings.
 #level = [
@@ -777,6 +784,7 @@ while running:
         behavelist2 = []
         CoinNum = CoinNum
         MonsterNum = MonsterNum
+        levelNum = levelNum
         level = makingmaze.createNewMazeWithRooms()
         player.rect.left = STARTX
         player.rect.top = STARTY
@@ -911,6 +919,10 @@ while running:
     for randommonster in randommonsters:
         if player.rect.colliderect(randommonster.rect):
             player.status = False
+    if CollectedCoin < TotalCoinNum:
+        pygame.draw.rect(screen, red, end_rect)  # exit color
+    else:
+        pygame.draw.rect(screen, green, end_rect)  # exit color
 
     if player.status == True:
         #pygame.draw.rect(screen, (255, 200, 0), player.rect)
@@ -948,12 +960,16 @@ while running:
     #print("HERE", STARTX, STARTY)
     #print(level[(STARTY + 16) // 32][STARTX // 32])
     # print(player.flashcounter)
-    pygame.draw.rect(screen, (255, 0, 0), end_rect)  # exit color
+
     # drawGrid()
     drawtext(screen,"CollectedCoin:", 0, 0)
     drawtext(screen, str(CollectedCoin), 208, 0)
+    drawtextblack(screen, "LEVEL", 0, 448)
+    drawtextblack(screen,str(levelNum),96, 448)
 
-    pygame.display.flip()  # update the contents of the entire display
+
+
+
     # pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
     if player.rect.colliderect(end_rect):
         if CollectedCoin == TotalCoinNum:
@@ -967,9 +983,10 @@ while running:
             coinslist = []
             behavelist1 = []
             behavelist2 = []
-            CoinNum = CoinNum + 3
+            CoinNum = CoinNum + 2
             TotalCoinNum = TotalCoinNum + CoinNum
-            MonsterNum = MonsterNum + 2
+            MonsterNum = MonsterNum + 3
+            levelNum = levelNum + 1
             level = makingmaze.createNewMazeWithRooms()
             player.rect.left = STARTX
             player.rect.top = STARTY
@@ -987,3 +1004,5 @@ while running:
         else:
             color = red
             drawtext(screen, "Please collect all the coins!", 640, 0)
+
+    pygame.display.flip()  # update the contents of the entire display
