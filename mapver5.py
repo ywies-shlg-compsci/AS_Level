@@ -384,6 +384,9 @@ class RandomMonster(object):
         self.num = 1
         self.prePosx = self.rect.x
         self.prePosy = self.rect.y
+        self.image_monster = pygame.transform.scale(pygame.image.load('monster.png'), (C_SIZE, C_SIZE))
+    def draw(self):
+        screen.blit(self.image_monster, (self.rect.x, self.rect.y))
 
     def makebehaviourlist(self):  # create new behavior
         self.statelist = []
@@ -850,7 +853,8 @@ while running:
         trackingmonster.move()
 
     for randommonster in randommonsters:
-        pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
+        #pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
+        randommonster.draw()
         randommonster.move()
         # randommonster.drawpath()
     for coin in coinslist:
