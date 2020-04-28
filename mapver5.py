@@ -737,10 +737,11 @@ KEY_PRESSED = False
 running = True
 Playerdraw = False
 Flag = 0
-yPos = (STARTY - 16)//32
-xPos = STARTX//32
 CollectedCoin = 0
 animationindex = 0
+
+yPos = (STARTY - 16)//32
+xPos = STARTX//32
 while level[yPos][xPos] == "W":
     STARTY = STARTY - 32
     yPos = (STARTY - 16)//32
@@ -775,6 +776,14 @@ while running:
         level = makingmaze.createNewMazeWithRooms()
         player.rect.left = STARTX
         player.rect.top = STARTY
+        yPos = (STARTY - 16) // 32
+        xPos = STARTX // 32
+        while level[yPos][xPos] == "W":
+            STARTY = STARTY - 32
+            yPos = (STARTY - 16) // 32
+
+        player.rect.x = STARTX
+        player.rect.y = STARTY
         makingmonster(level)
         makingcoins(level)
         CreateMonsterInMaze(level)
@@ -953,6 +962,14 @@ while running:
         level = makingmaze.createNewMazeWithRooms()
         player.rect.left = STARTX
         player.rect.top = STARTY
+        yPos = (STARTY - 16) // 32
+        xPos = STARTX // 32
+        while level[yPos][xPos] == "W":
+            STARTY = STARTY - 32
+            yPos = (STARTY - 16) // 32
+
+        player.rect.x = STARTX
+        player.rect.y = STARTY
         makingmonster(level)
         makingcoins(level)
         CreateMonsterInMaze(level)
