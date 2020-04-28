@@ -10,6 +10,8 @@ LEFT = 3
 STARTX = 32
 STARTY = 432
 
+black = (0,0,0)
+
 P_SIZE = 16
 C_SIZE = 16
 
@@ -681,6 +683,11 @@ def CreateMonsterInMaze(level):
         x = 0
     return end_rect,xPosition,yPosition
 
+def drawtext(window,content,x,y):
+    font = pygame.font.SysFont('Arial', 40)
+    text = font.render(content,1,black)
+    window.blit(text,(x,y))
+
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
 pygame.init()
@@ -925,6 +932,8 @@ while running:
     # print(player.flashcounter)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)  # exit color
     # drawGrid()
+    drawtext(screen,"CollectedCoin:", 0, 0)
+    drawtext(screen, str(CollectedCoin), 208, 0)
 
     pygame.display.flip()  # update the contents of the entire display
     # pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
