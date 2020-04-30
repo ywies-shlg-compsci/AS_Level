@@ -112,6 +112,15 @@ class Spike(object):
         spikes.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
 
+
+    def calculatehalls(self):
+        hallNum = 0
+        for i in range(0,14):
+            for j in range(0,39):
+                if level[i][j] == "W" and level[i][j] == "W":
+                    hallNum = hallNum +1
+        print("Num of halls:",hallNum)
+
 class FlyingSpike(object):
     def __init__(self, pos):
         flyingspikes.append(self)
@@ -653,7 +662,6 @@ def makingcoins(level):
         RanY = random.randint(1,38)
         level[RanX] = replace_C(level[RanX],RanY,"C")
 
-
 def CreateMonsterInMaze(level):
     # Parse the level string above. W = wall, E = exit
     global end_rect, xPosition, yPosition
@@ -768,7 +776,7 @@ xIndex = xPosition//32
 yIndex = (yPosition+16)//32#position of the end_rect
 #print(yIndex,xIndex)
 
-
+Spike.calculatehalls(level)
 
 while running:
     v = 8
