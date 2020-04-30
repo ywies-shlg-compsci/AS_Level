@@ -115,8 +115,8 @@ class Spike(object):
 
     def calculatehalls(self):
         hallNum = 0
-        for i in range(0,14):
-            for j in range(0,39):
+        for i in range(0,15):
+            for j in range(0,40):
                 if level[i][j] == "W" and level[i][j] == "W":
                     hallNum = hallNum +1
         print("Num of halls:",hallNum)
