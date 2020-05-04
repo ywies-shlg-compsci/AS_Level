@@ -653,10 +653,10 @@ def calculatehalls(level):
         for j in range(0,40-2):
             if level[i][j] == "W" and level[i][j+2] == "W" and level[i][j+1] ==" ":
                 hallNum = hallNum +1
-                halllist.append(level[i][j+1])
+                halllist.append((i,j+1))
             if level[i][j] == "W" and level[i+2][j] == "W" and level[i+1][j] ==" ":
                 hallNum = hallNum +1
-                halllist.append(level[i+1][j])
+                halllist.append((i+1,j))
 
 
     print("Num of halls:",hallNum)
@@ -666,8 +666,8 @@ def calculatehalls(level):
 def makingspikes(level):
     freehallist = calculatehalls(level)
     for i in range(len(freehallist)):
-        RanX = freehallist[0]
-        RanY = freehallist[1]
+        RanX = freehallist[i][0]
+        RanY = freehallist[i][1]
         level[RanX] = replace_C(level[RanX], RanY, "S")
 
 
@@ -799,7 +799,7 @@ xIndex = xPosition//32
 yIndex = (yPosition+16)//32#position of the end_rect
 #print(yIndex,xIndex)
 
-Spike.calculatehalls(level)
+calculatehalls(level)
 
 while running:
     v = 8
