@@ -113,13 +113,25 @@ class Spike(object):
         self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
 
 
+
     def calculatehalls(self):
         hallNum = 0
-        for i in range(0,15):
-            for j in range(0,40):
-                if level[i][j] == "W" and level[i][j] == "W":
+        halllist = []
+        for i in range(0,15-2):
+            for j in range(0,40-2):
+                if level[i][j] == "W" and level[i][j+2] == "W" and level[i][j+1] ==" ":
                     hallNum = hallNum +1
+                    halllist.append(level[i+1][j+1])
+                if level[i][j] == "W" and level[i+2][j] == "W" and level[i+1][j] ==" ":
+                    hallNum = hallNum +1
+                    halllist.append(level[i+1][j+1])
+
+
         print("Num of halls:",hallNum)
+        print(halllist)
+
+    #def createspikes(self):
+
 
 class FlyingSpike(object):
     def __init__(self, pos):
