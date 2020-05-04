@@ -121,10 +121,10 @@ class Spike(object):
             for j in range(0,40-2):
                 if level[i][j] == "W" and level[i][j+2] == "W" and level[i][j+1] ==" ":
                     hallNum = hallNum +1
-                    halllist.append(level[i+1][j+1])
+                    halllist.append(level[i][j+1])
                 if level[i][j] == "W" and level[i+2][j] == "W" and level[i+1][j] ==" ":
                     hallNum = hallNum +1
-                    halllist.append(level[i+1][j+1])
+                    halllist.append(level[i+1][j])
 
 
         print("Num of halls:",hallNum)
