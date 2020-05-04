@@ -115,23 +115,7 @@ class Spike(object):
     def draw(self):
         screen.blit(self.rect, (self.rect.x, self.rect.y))
 
-    def calculatehalls(self):
-        global hallist
-        hallNum = 0
-        halllist = []
-        for i in range(0,15-2):
-            for j in range(0,40-2):
-                if level[i][j] == "W" and level[i][j+2] == "W" and level[i][j+1] ==" ":
-                    hallNum = hallNum +1
-                    halllist.append(level[i][j+1])
-                if level[i][j] == "W" and level[i+2][j] == "W" and level[i+1][j] ==" ":
-                    hallNum = hallNum +1
-                    halllist.append(level[i+1][j])
 
-
-        print("Num of halls:",hallNum)
-        print(halllist)
-        return halllist
 
 class FlyingSpike(object):
     def __init__(self, pos):
@@ -662,10 +646,28 @@ def replace_C(s, index, character):
     s = s[:index] + character + s[index+1:]
     return s
 
+def calculatehalls(level):
+    hallNum = 0
+    halllist = []
+    for i in range(0,15-2):
+        for j in range(0,40-2):
+            if level[i][j] == "W" and level[i][j+2] == "W" and level[i][j+1] ==" ":
+                hallNum = hallNum +1
+                halllist.append(level[i][j+1])
+            if level[i][j] == "W" and level[i+2][j] == "W" and level[i+1][j] ==" ":
+                hallNum = hallNum +1
+                halllist.append(level[i+1][j])
+
+
+    print("Num of halls:",hallNum)
+    print(halllist)
+    return halllist
+
 def makingspikes(level):
-    for i in range(len(hallist)):
-        RanX = hallist[0]
-        RanY = hallist[1]
+    freehallist = calculatehalls(level)
+    for i in range(len(freehallist)):
+        RanX = freehallist[0]
+        RanY = freehallist[1]
         level[RanX] = replace_C(level[RanX], RanY, "S")
 
 
