@@ -112,9 +112,11 @@ class Spike(object):
         spikes.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
 
-
+    def draw(self):
+        screen.blit(self.rect, (self.rect.x, self.rect.y))
 
     def calculatehalls(self):
+        global hallist
         hallNum = 0
         halllist = []
         for i in range(0,15-2):
@@ -129,9 +131,7 @@ class Spike(object):
 
         print("Num of halls:",hallNum)
         print(halllist)
-
-    #def createspikes(self):
-
+        return halllist
 
 class FlyingSpike(object):
     def __init__(self, pos):
@@ -662,6 +662,14 @@ def replace_C(s, index, character):
     s = s[:index] + character + s[index+1:]
     return s
 
+def makingspikes(level):
+    for i in range(len(hallist)):
+        RanX = hallist[0]
+        RanY = hallist[1]
+        level[RanX] = replace_C(level[RanX], RanY, "S")
+
+
+
 def makingmonster(level):
     for i in range(0,MonsterNum):
         RanX = random.randint(1, 13)
@@ -763,6 +771,7 @@ levelNum = 1
 level = makingmaze.createNewMazeWithRooms()
 makingmonster(level)
 makingcoins(level)
+makingspikes(level)
 CreateMonsterInMaze(level)
 
 
