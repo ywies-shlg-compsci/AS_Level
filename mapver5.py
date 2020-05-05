@@ -667,7 +667,7 @@ def calculatehalls(level):
 def makingspikes(level):
     freehallist = calculatehalls(level)
     for i in range(spikeNum):
-        j = random.randint(0,len(freehallist))
+        j = random.randint(0,len(freehallist)-1)
         RanX = freehallist[j][0]
         RanY = freehallist[j][1]
         level[RanX] = replace_C(level[RanX], RanY, "S")
