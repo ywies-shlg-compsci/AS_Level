@@ -666,9 +666,10 @@ def calculatehalls(level):
 
 def makingspikes(level):
     freehallist = calculatehalls(level)
-    for i in range(len(freehallist)):
-        RanX = freehallist[i][0]
-        RanY = freehallist[i][1]
+    for i in range(spikeNum):
+        j = random.randint(0,len(freehallist))
+        RanX = freehallist[j][0]
+        RanY = freehallist[j][1]
         level[RanX] = replace_C(level[RanX], RanY, "S")
 
 
@@ -767,8 +768,9 @@ behavelist2 = []
 CoinNum = 1
 TotalCoinNum = CoinNum
 MonsterNum = 1
-
 levelNum = 1
+playerlives = 3
+spikeNum = 10
 
 # Holds the level layout in a list of strings.
 #level = [
@@ -822,8 +824,7 @@ gameover = True
 gameState = "start"
 while running:
     clock.tick(120)
-    for e in pygame.event.get():  # quit function
-
+    for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
@@ -841,8 +842,9 @@ while running:
 
     if gameState == "gameover":
         screen.fill((0, 0, 0))
-        drawtextwhite(screen, "Press S To Start The Game", 0, 0)
-        drawtextwhite(screen, "Press Q To Quit The Game", 0, 32)
+        drawtextwhite(screen, "Game Over", 0, 0)
+        drawtextwhite(screen, "Press S To Start The Game", 0, 32)
+        drawtextwhite(screen, "Press Q To Quit The Game", 0, 64)
         key = pygame.key.get_pressed()
         if key[pygame.K_s]:
             gameover = False
@@ -863,8 +865,6 @@ while running:
 # if press exit
 #   running = False
     while not gameover:
-
-
         v = 8
         clock.tick(120)
         if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W"):
@@ -879,6 +879,7 @@ while running:
             coinslist = []
             behavelist1 = []
             behavelist2 = []
+            spikeNum = spikeNum
             CoinNum = CoinNum
             MonsterNum = MonsterNum
             levelNum = levelNum
@@ -887,6 +888,7 @@ while running:
             player.rect.top = STARTY
             yPos = (STARTY - 16) // 32
             xPos = STARTX // 32
+            playerlives = playerlives
             while level[yPos][xPos] == "W":
                 STARTY = STARTY - 32
                 yPos = (STARTY - 16) // 32
@@ -1017,33 +1019,37 @@ while running:
                     player.drawleft()
 
         elif player.status == False:
-            gameState = "gameover"
-            gameover = True
+
             player.rect.left = STARTX
             player.rect.top = STARTY
-            # print("dead")
             player.flashcounter = player.flashcounter - 1
             if player.flashcounter % 2 == 1:
                 #pygame.draw.rect(screen, (255, 200, 0), player.rect)
                 player.drawright()
             elif player.flashcounter == 0:
                 player.status = True
+                playerlives = playerlives - 1
                 player.flashcounter = 10
         if animationindex < 3:
             animationindex = animationindex + 1
         elif animationindex == 3:
             animationindex = 0
 
+        if playerlives == 0:
+            gameState = "gameover"
+            gameover = True
         #player.drawborder(screen)
         #print("HERE", STARTX, STARTY)
         #print(level[(STARTY + 16) // 32][STARTX // 32])
         # print(player.flashcounter)
 
         # drawGrid()
-        drawtext(screen,"CollectedCoin:", 0, 0)
-        drawtext(screen, str(CollectedCoin), 208, 0)
+        drawtext(screen,"lives:", 0, 0)
+        drawtext(screen, str(playerlives),80 , 0)
         drawtextblack(screen, "LEVEL", 0, 448)
         drawtextblack(screen,str(levelNum),96, 448)
+
+
 
 
 
@@ -1070,6 +1076,7 @@ while running:
                 player.rect.top = STARTY
                 yPos = (STARTY - 16) // 32
                 xPos = STARTX // 32
+                playerlives = playerlives + 2
                 while level[yPos][xPos] == "W":
                     STARTY = STARTY - 32
                     yPos = (STARTY - 16) // 32
@@ -1078,6 +1085,11 @@ while running:
                 player.rect.y = STARTY
                 makingmonster(level)
                 makingcoins(level)
+                freehallist = calculatehalls(level)
+                if spikeNum + 5 < len(freehallist):
+                    spikeNum = spikeNum +5
+                else:
+                    spikeNum = len(freehallist)
                 makingspikes(level)
                 CreateMonsterInMaze(level)
             else:
