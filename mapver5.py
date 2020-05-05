@@ -821,6 +821,13 @@ yIndex = (yPosition+16)//32#position of the end_rect
 gameover = True
 gameState = "start"
 while running:
+    clock.tick(120)
+    for e in pygame.event.get():  # quit function
+
+        if e.type == pygame.QUIT:
+            running = False
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
+            running = False
     if gameState == "start":
         screen.fill((0, 0, 0))
         drawtextwhite(screen, "Press S To Start The Game", 0, 0)
