@@ -927,22 +927,15 @@ while running:
             player.move(0, v)
             KEY_PRESSED = True
 
-        # Just added this to make it slightly fun ;)
-        #if player.rect.colliderect(end_rect):
-        if key[pygame.K_p]:
-            print("You win!")
-            break
         # Draw the scene
         screen.fill((0, 0, 0))  # background color
         for wall in walls:
-            #pygame.draw.rect(screen, (255, 255, 255), wall.rect)  # wall color
             wall.draw()
 
         for coin in coinslist:
             coin.draw()
 
         for spike in spikes:
-            #pygame.draw.rect(screen, (0, 255, 0), spike.rect)
             spike.draw()
 
         for flyingspike in flyingspikes:
