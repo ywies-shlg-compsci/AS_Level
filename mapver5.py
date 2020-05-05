@@ -819,27 +819,31 @@ yIndex = (yPosition+16)//32#position of the end_rect
 
 
 gameover = True
-gameState = start, playing, gameover
+gameState = "start"
 while running:
-    if gameState == start:
+    if gameState == "start":
         screen.fill((0, 0, 0))
         drawtextwhite(screen, "Press S To Start The Game", 0, 0)
         drawtextwhite(screen, "Press Q To Quit The Game", 0, 32)
         key = pygame.key.get_pressed()
         if key[pygame.K_s]:
             gameover = False
-        if key[pygame.K_q]:
-            running = False
-    if gameState == gameover:
-        screen.fill((0, 0, 0))
-        drawtextwhite(screen, "Press S To Start The Game", 0, 0)
-        drawtextwhite(screen, "Press Q To Quit The Game", 0, 32)
-        key = pygame.key.get_pressed()
-        if key[pygame.K_s]:
-            gameover = False
+            gameState = "playing"
         if key[pygame.K_q]:
             running = False
 
+    if gameState == "gameover":
+        screen.fill((0, 0, 0))
+        drawtextwhite(screen, "Press S To Start The Game", 0, 0)
+        drawtextwhite(screen, "Press Q To Quit The Game", 0, 32)
+        key = pygame.key.get_pressed()
+        if key[pygame.K_s]:
+            gameover = False
+            gameState = "playing"
+        if key[pygame.K_q]:
+            running = False
+
+    pygame.display.flip()
 # check gamestate
 # if in start state:
 # show the start screen
@@ -933,22 +937,7 @@ while running:
         for wall in walls:
             #pygame.draw.rect(screen, (255, 255, 255), wall.rect)  # wall color
             wall.draw()
-        # create all the coins (before the game loop)
-        # make sure the coins ARE NOT in the wall
-        # put them in the map
-        # Loop through all the coins
-        # check to see if coins are touching the player see line 769 for example
-        # coin then is eatten by player (erase it somehow) - AFTER the loop
 
-        # that means coin class needs 'state' = 'eatten'
-        # change state of coin to 'eatten'
-        # player maybe has coin score... and if you are touched by enemy
-        # you only lose coins unless you don't have enough...
-
-        # Loop through all the coins
-        # if the coin is NOT eatten
-        # add that coin to a NEWcoinList
-        # coinList = NEWcoinList (all coins that haven't been eatten)
         for coin in coinslist:
             coin.draw()
 
@@ -991,10 +980,6 @@ while running:
         else:
             color = green
 
-
-        #print(CollectedCoin)
-        #print(len(coinslist))
-
         for spike in spikes:
             if player.rect.colliderect(spike.rect):
                 player.status = False
@@ -1032,6 +1017,8 @@ while running:
                     player.drawleft()
 
         elif player.status == False:
+            gameState = "gameover"
+            gameover = True
             player.rect.left = STARTX
             player.rect.top = STARTY
             # print("dead")
