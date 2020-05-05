@@ -17,6 +17,7 @@ green = (0,255,0)
 
 P_SIZE = 16
 C_SIZE = 16
+S_SIZE = 7
 
 xPosition = 0
 yPosition = 0
@@ -110,7 +111,7 @@ class Wall(object):
 class Spike(object):
     def __init__(self, pos):
         spikes.append(self)
-        self.rect = pygame.Rect(pos[0], pos[1], 10, 10)
+        self.rect = pygame.Rect(pos[0], pos[1], S_SIZE, S_SIZE)
 
     def draw(self):
         screen.blit(self.rect, (self.rect.x, self.rect.y))
@@ -657,7 +658,7 @@ def calculatehalls(level):
             if level[i][j] == "W" and level[i+2][j] == "W" and level[i+1][j] ==" ":
                 hallNum = hallNum +1
                 halllist.append((i+1,j))
-                
+
     print(halllist)
     return halllist
 
@@ -697,7 +698,18 @@ def CreateMonsterInMaze(level):
             if col == "F":
                 FlyingSpike((x, 650))
             if col == "S":
-                Spike((x, y + 22))
+                SpikeOffset = 25
+                RandomNum = random.randint(0,3)
+                if RandomNum == 0:
+                    Spike((x, y + SpikeOffset))
+                if RandomNum == 1:
+                    Spike((x + SpikeOffset,y))
+                if RandomNum == 2:
+                    Spike((x + SpikeOffset, y + SpikeOffset))
+                if RandomNum == 3:
+                    Spike((x , y))
+
+
             if col == "M":
                 behavelist1 = ['left', 60, 'up', 60, 'down', 60, 'right', 60]
                 squaremonsters.append(SquareMonster((x, y + 16), 3, 2, behavelist1))
@@ -829,6 +841,7 @@ while running:
         player.rect.y = STARTY
         makingmonster(level)
         makingcoins(level)
+        makingspikes(level)
         CreateMonsterInMaze(level)
 
 
@@ -1034,6 +1047,7 @@ while running:
             player.rect.y = STARTY
             makingmonster(level)
             makingcoins(level)
+            makingspikes(level)
             CreateMonsterInMaze(level)
         else:
             color = red
