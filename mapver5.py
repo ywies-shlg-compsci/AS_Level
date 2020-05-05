@@ -112,9 +112,10 @@ class Spike(object):
     def __init__(self, pos):
         spikes.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], S_SIZE, S_SIZE)
+        self.image_spike = pygame.transform.scale(pygame.image.load('spike.png'), (S_SIZE, S_SIZE))
 
     def draw(self):
-        screen.blit(self.rect, (self.rect.x, self.rect.y))
+        screen.blit(self.image_spike, (self.rect.x, self.rect.y))
 
 
 
@@ -910,7 +911,8 @@ while running:
         coin.draw()
 
     for spike in spikes:
-        pygame.draw.rect(screen, (0, 255, 0), spike.rect)
+        #pygame.draw.rect(screen, (0, 255, 0), spike.rect)
+        spike.draw()
 
     for flyingspike in flyingspikes:
         pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
