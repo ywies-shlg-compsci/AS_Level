@@ -112,7 +112,7 @@ class Spike(object):
     def __init__(self, pos):
         spikes.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], S_SIZE, S_SIZE)
-        self.image_spike = pygame.transform.scale(pygame.image.load('spike.png'), (S_SIZE, S_SIZE))
+        self.image_spike = pygame.transform.scale(pygame.image.load('spike2.png'), (S_SIZE, S_SIZE))
 
     def draw(self):
         screen.blit(self.image_spike, (self.rect.x, self.rect.y))
