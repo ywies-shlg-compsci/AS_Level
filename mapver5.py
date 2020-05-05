@@ -14,6 +14,7 @@ color = (0,0,0)
 black = (0,0,0)
 red = (255,0,0)
 green = (0,255,0)
+white = (255,255,255)
 
 P_SIZE = 16
 C_SIZE = 16
@@ -740,6 +741,11 @@ def drawtextblack(window,content,x,y):
     text = font.render(content,1,black)
     window.blit(text,(x,y))
 
+def drawtextwhite(window,content,x,y):
+    font = pygame.font.SysFont('Arial', 40)
+    text = font.render(content,1,white)
+    window.blit(text,(x,y))
+
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
 pygame.init()
@@ -811,217 +817,47 @@ yIndex = (yPosition+16)//32#position of the end_rect
 #print(yIndex,xIndex)
 
 
+
+gameover = True
+gameState = start, playing, gameover
 while running:
-    v = 8
-    clock.tick(120)
-    if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W"):
-        print("error")
-        walls = []  # List to hold the walls
-        player = Player()
-        spikes = []
-        flyingspikes = []
-        squaremonsters = []
-        trackingmonsters = []
-        randommonsters = []
-        coinslist = []
-        behavelist1 = []
-        behavelist2 = []
-        CoinNum = CoinNum
-        MonsterNum = MonsterNum
-        levelNum = levelNum
-        level = makingmaze.createNewMazeWithRooms()
-        player.rect.left = STARTX
-        player.rect.top = STARTY
-        yPos = (STARTY - 16) // 32
-        xPos = STARTX // 32
-        while level[yPos][xPos] == "W":
-            STARTY = STARTY - 32
-            yPos = (STARTY - 16) // 32
-
-        player.rect.x = STARTX
-        player.rect.y = STARTY
-        makingmonster(level)
-        makingcoins(level)
-        makingspikes(level)
-        CreateMonsterInMaze(level)
-
-
-
-    for e in pygame.event.get():  # quit function
-
-        if e.type == pygame.QUIT:
+    if gameState == start:
+        screen.fill((0, 0, 0))
+        drawtextwhite(screen, "Press S To Start The Game", 0, 0)
+        drawtextwhite(screen, "Press Q To Quit The Game", 0, 32)
+        key = pygame.key.get_pressed()
+        if key[pygame.K_s]:
+            gameover = False
+        if key[pygame.K_q]:
             running = False
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
+    if gameState == gameover:
+        screen.fill((0, 0, 0))
+        drawtextwhite(screen, "Press S To Start The Game", 0, 0)
+        drawtextwhite(screen, "Press Q To Quit The Game", 0, 32)
+        key = pygame.key.get_pressed()
+        if key[pygame.K_s]:
+            gameover = False
+        if key[pygame.K_q]:
             running = False
 
-        #if e.type == pygame.KEYUP:
-            #monster = trackingmonsters[0]
-            #if e.key == pygame.K_a:
-                #monster.makebehaviourlistkeyboard(LEFT)
-            #if e.key == pygame.K_d:
-                #monster.makebehaviourlistkeyboard(RIGHT)
-            #if e.key == pygame.K_w:
-                #monster.makebehaviourlistkeyboard(UP)
-            #if e.key == pygame.K_s:
-                #monster.makebehaviourlistkeyboard(DOWN)
-
-    key = pygame.key.get_pressed()
-    if key[pygame.K_SPACE]:
-        v = 16
-    if key[pygame.K_LEFT]:
-        player.move(-v, 0)
-        KEY_PRESSED = True
-    if key[pygame.K_RIGHT]:
-        player.move(v, 0)
-        KEY_PRESSED = True
-    if key[pygame.K_UP]:
-        player.move(0, -v)
-        KEY_PRESSED = True
-    if key[pygame.K_DOWN]:
-        player.move(0, v)
-        KEY_PRESSED = True
-
-    # Just added this to make it slightly fun ;)
-    #if player.rect.colliderect(end_rect):
-    if key[pygame.K_p]:
-        print("You win!")
-        break
-    # Draw the scene
-    screen.fill((0, 0, 0))  # background color
-    for wall in walls:
-        #pygame.draw.rect(screen, (255, 255, 255), wall.rect)  # wall color
-        wall.draw()
-    # create all the coins (before the game loop)
-    # make sure the coins ARE NOT in the wall
-    # put them in the map
-    # Loop through all the coins
-    # check to see if coins are touching the player see line 769 for example
-    # coin then is eatten by player (erase it somehow) - AFTER the loop
-
-    # that means coin class needs 'state' = 'eatten'
-    # change state of coin to 'eatten'
-    # player maybe has coin score... and if you are touched by enemy
-    # you only lose coins unless you don't have enough...
-
-    # Loop through all the coins
-    # if the coin is NOT eatten
-    # add that coin to a NEWcoinList
-    # coinList = NEWcoinList (all coins that haven't been eatten)
-    for coin in coinslist:
-        coin.draw()
-
-    for spike in spikes:
-        #pygame.draw.rect(screen, (0, 255, 0), spike.rect)
-        spike.draw()
-
-    for flyingspike in flyingspikes:
-        pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
-        flyingspike.triggerActive(player, KEY_PRESSED)
-        if flyingspike.trigger == True:
-            flyingspike.move()
-
-    for squaremonster in squaremonsters:
-        squaremonster.move()
-        pygame.draw.rect(screen, (0, 255, 150), squaremonster.rect)
-        squaremonster.drawborder(screen)
-
-    for trackingmonster in trackingmonsters:
-        pygame.draw.rect(screen, (150, 150, 255), trackingmonster.rect)
-        trackingmonster.move()
-
-    for randommonster in randommonsters:
-        #pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
-        randommonster.draw()
-        randommonster.move()
-        # randommonster.drawpath()
-    for coin in coinslist:
-        if player.rect.collidepoint(coin.rect.x, coin.rect.y) == True or player.rect.collidepoint(coin.rect.x+16, coin.rect.y) == True or player.rect.collidepoint(coin.rect.x, coin.rect.y+16) == True or player.rect.collidepoint(coin.rect.x+16, coin.rect.y+16) == True:
-            coin.Delete =True
-            CollectedCoin = CollectedCoin + 1
-    newcoinlist = []
-    for coin in coinslist:
-        if coin.Delete == False:
-            newcoinlist.append(coin)
-    coinslist = newcoinlist
-
-    if CollectedCoin < TotalCoinNum :
-        color = red
-    else:
-        color = green
+# check gamestate
+# if in start state:
+# show the start screen
+# if gave over
+# show the game over screen
+# check for user input -- press start..
+# did player press 'S' , or 'E' exit?
+# if press start
+#   gameover = False
+# if press exit
+#   running = False
+    while not gameover:
 
 
-    #print(CollectedCoin)
-    #print(len(coinslist))
-
-    for spike in spikes:
-        if player.rect.colliderect(spike.rect):
-            player.status = False
-    for flyingspike in flyingspikes:
-        if player.rect.colliderect(flyingspike.rect):
-            player.status = False
-    for squaremonster in squaremonsters:
-        if player.rect.colliderect(squaremonster.rect):
-            player.status = False
-    for trackingmonster in trackingmonsters:
-        if player.rect.colliderect(trackingmonster.rect):
-            player.status = False
-    for randommonster in randommonsters:
-        if player.rect.colliderect(randommonster.rect):
-            player.status = False
-    if CollectedCoin < TotalCoinNum:
-        pygame.draw.rect(screen, red, end_rect)  # exit color
-    else:
-        pygame.draw.rect(screen, green, end_rect)  # exit color
-
-    if player.status == True:
-        #pygame.draw.rect(screen, (255, 200, 0), player.rect)
-        if Flag == 0:
-            if key[pygame.K_LEFT]:
-                player.drawleft()
-                Flag = 1
-            else:
-
-                player.drawright()
-        if Flag == 1:
-            if key[pygame.K_RIGHT]:
-                player.drawright()
-                Flag = 0
-            else:
-                player.drawleft()
-
-    elif player.status == False:
-        player.rect.left = STARTX
-        player.rect.top = STARTY
-        # print("dead")
-        player.flashcounter = player.flashcounter - 1
-        if player.flashcounter % 2 == 1:
-            #pygame.draw.rect(screen, (255, 200, 0), player.rect)
-            player.drawright()
-        elif player.flashcounter == 0:
-            player.status = True
-            player.flashcounter = 10
-    if animationindex < 3:
-        animationindex = animationindex + 1
-    elif animationindex == 3:
-        animationindex = 0
-
-    #player.drawborder(screen)
-    #print("HERE", STARTX, STARTY)
-    #print(level[(STARTY + 16) // 32][STARTX // 32])
-    # print(player.flashcounter)
-
-    # drawGrid()
-    drawtext(screen,"CollectedCoin:", 0, 0)
-    drawtext(screen, str(CollectedCoin), 208, 0)
-    drawtextblack(screen, "LEVEL", 0, 448)
-    drawtextblack(screen,str(levelNum),96, 448)
-
-
-
-
-    # pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
-    if player.rect.colliderect(end_rect):
-        if CollectedCoin == TotalCoinNum:
+        v = 8
+        clock.tick(120)
+        if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W"):
+            print("error")
             walls = []  # List to hold the walls
             player = Player()
             spikes = []
@@ -1032,10 +868,9 @@ while running:
             coinslist = []
             behavelist1 = []
             behavelist2 = []
-            CoinNum = CoinNum + 1
-            TotalCoinNum = TotalCoinNum + CoinNum
-            MonsterNum = MonsterNum + 2
-            levelNum = levelNum + 1
+            CoinNum = CoinNum
+            MonsterNum = MonsterNum
+            levelNum = levelNum
             level = makingmaze.createNewMazeWithRooms()
             player.rect.left = STARTX
             player.rect.top = STARTY
@@ -1051,8 +886,215 @@ while running:
             makingcoins(level)
             makingspikes(level)
             CreateMonsterInMaze(level)
-        else:
-            color = red
-            drawtext(screen, "Please collect all the coins!", 640, 0)
 
-    pygame.display.flip()  # update the contents of the entire display
+
+
+        for e in pygame.event.get():  # quit function
+
+            if e.type == pygame.QUIT:
+                running = False
+            if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
+                running = False
+
+            #if e.type == pygame.KEYUP:
+                #monster = trackingmonsters[0]
+                #if e.key == pygame.K_a:
+                    #monster.makebehaviourlistkeyboard(LEFT)
+                #if e.key == pygame.K_d:
+                    #monster.makebehaviourlistkeyboard(RIGHT)
+                #if e.key == pygame.K_w:
+                    #monster.makebehaviourlistkeyboard(UP)
+                #if e.key == pygame.K_s:
+                    #monster.makebehaviourlistkeyboard(DOWN)
+
+        key = pygame.key.get_pressed()
+        if key[pygame.K_SPACE]:
+            v = 16
+        if key[pygame.K_LEFT]:
+            player.move(-v, 0)
+            KEY_PRESSED = True
+        if key[pygame.K_RIGHT]:
+            player.move(v, 0)
+            KEY_PRESSED = True
+        if key[pygame.K_UP]:
+            player.move(0, -v)
+            KEY_PRESSED = True
+        if key[pygame.K_DOWN]:
+            player.move(0, v)
+            KEY_PRESSED = True
+
+        # Just added this to make it slightly fun ;)
+        #if player.rect.colliderect(end_rect):
+        if key[pygame.K_p]:
+            print("You win!")
+            break
+        # Draw the scene
+        screen.fill((0, 0, 0))  # background color
+        for wall in walls:
+            #pygame.draw.rect(screen, (255, 255, 255), wall.rect)  # wall color
+            wall.draw()
+        # create all the coins (before the game loop)
+        # make sure the coins ARE NOT in the wall
+        # put them in the map
+        # Loop through all the coins
+        # check to see if coins are touching the player see line 769 for example
+        # coin then is eatten by player (erase it somehow) - AFTER the loop
+
+        # that means coin class needs 'state' = 'eatten'
+        # change state of coin to 'eatten'
+        # player maybe has coin score... and if you are touched by enemy
+        # you only lose coins unless you don't have enough...
+
+        # Loop through all the coins
+        # if the coin is NOT eatten
+        # add that coin to a NEWcoinList
+        # coinList = NEWcoinList (all coins that haven't been eatten)
+        for coin in coinslist:
+            coin.draw()
+
+        for spike in spikes:
+            #pygame.draw.rect(screen, (0, 255, 0), spike.rect)
+            spike.draw()
+
+        for flyingspike in flyingspikes:
+            pygame.draw.rect(screen, (0, 255, 0), flyingspike.rect)
+            flyingspike.triggerActive(player, KEY_PRESSED)
+            if flyingspike.trigger == True:
+                flyingspike.move()
+
+        for squaremonster in squaremonsters:
+            squaremonster.move()
+            pygame.draw.rect(screen, (0, 255, 150), squaremonster.rect)
+            squaremonster.drawborder(screen)
+
+        for trackingmonster in trackingmonsters:
+            pygame.draw.rect(screen, (150, 150, 255), trackingmonster.rect)
+            trackingmonster.move()
+
+        for randommonster in randommonsters:
+            #pygame.draw.rect(screen, (150, 150, 150), randommonster.rect)
+            randommonster.draw()
+            randommonster.move()
+            # randommonster.drawpath()
+        for coin in coinslist:
+            if player.rect.collidepoint(coin.rect.x, coin.rect.y) == True or player.rect.collidepoint(coin.rect.x+16, coin.rect.y) == True or player.rect.collidepoint(coin.rect.x, coin.rect.y+16) == True or player.rect.collidepoint(coin.rect.x+16, coin.rect.y+16) == True:
+                coin.Delete =True
+                CollectedCoin = CollectedCoin + 1
+        newcoinlist = []
+        for coin in coinslist:
+            if coin.Delete == False:
+                newcoinlist.append(coin)
+        coinslist = newcoinlist
+
+        if CollectedCoin < TotalCoinNum :
+            color = red
+        else:
+            color = green
+
+
+        #print(CollectedCoin)
+        #print(len(coinslist))
+
+        for spike in spikes:
+            if player.rect.colliderect(spike.rect):
+                player.status = False
+        for flyingspike in flyingspikes:
+            if player.rect.colliderect(flyingspike.rect):
+                player.status = False
+        for squaremonster in squaremonsters:
+            if player.rect.colliderect(squaremonster.rect):
+                player.status = False
+        for trackingmonster in trackingmonsters:
+            if player.rect.colliderect(trackingmonster.rect):
+                player.status = False
+        for randommonster in randommonsters:
+            if player.rect.colliderect(randommonster.rect):
+                player.status = False
+        if CollectedCoin < TotalCoinNum:
+            pygame.draw.rect(screen, red, end_rect)  # exit color
+        else:
+            pygame.draw.rect(screen, green, end_rect)  # exit color
+
+        if player.status == True:
+            #pygame.draw.rect(screen, (255, 200, 0), player.rect)
+            if Flag == 0:
+                if key[pygame.K_LEFT]:
+                    player.drawleft()
+                    Flag = 1
+                else:
+
+                    player.drawright()
+            if Flag == 1:
+                if key[pygame.K_RIGHT]:
+                    player.drawright()
+                    Flag = 0
+                else:
+                    player.drawleft()
+
+        elif player.status == False:
+            player.rect.left = STARTX
+            player.rect.top = STARTY
+            # print("dead")
+            player.flashcounter = player.flashcounter - 1
+            if player.flashcounter % 2 == 1:
+                #pygame.draw.rect(screen, (255, 200, 0), player.rect)
+                player.drawright()
+            elif player.flashcounter == 0:
+                player.status = True
+                player.flashcounter = 10
+        if animationindex < 3:
+            animationindex = animationindex + 1
+        elif animationindex == 3:
+            animationindex = 0
+
+        #player.drawborder(screen)
+        #print("HERE", STARTX, STARTY)
+        #print(level[(STARTY + 16) // 32][STARTX // 32])
+        # print(player.flashcounter)
+
+        # drawGrid()
+        drawtext(screen,"CollectedCoin:", 0, 0)
+        drawtext(screen, str(CollectedCoin), 208, 0)
+        drawtextblack(screen, "LEVEL", 0, 448)
+        drawtextblack(screen,str(levelNum),96, 448)
+
+
+
+
+        # pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
+        if player.rect.colliderect(end_rect):
+            if CollectedCoin == TotalCoinNum:
+                walls = []  # List to hold the walls
+                player = Player()
+                spikes = []
+                flyingspikes = []
+                squaremonsters = []
+                trackingmonsters = []
+                randommonsters = []
+                coinslist = []
+                behavelist1 = []
+                behavelist2 = []
+                CoinNum = CoinNum + 1
+                TotalCoinNum = TotalCoinNum + CoinNum
+                MonsterNum = MonsterNum + 2
+                levelNum = levelNum + 1
+                level = makingmaze.createNewMazeWithRooms()
+                player.rect.left = STARTX
+                player.rect.top = STARTY
+                yPos = (STARTY - 16) // 32
+                xPos = STARTX // 32
+                while level[yPos][xPos] == "W":
+                    STARTY = STARTY - 32
+                    yPos = (STARTY - 16) // 32
+
+                player.rect.x = STARTX
+                player.rect.y = STARTY
+                makingmonster(level)
+                makingcoins(level)
+                makingspikes(level)
+                CreateMonsterInMaze(level)
+            else:
+                color = red
+                drawtext(screen, "Please collect all the coins!", 640, 0)
+
+        pygame.display.flip()  # update the contents of the entire display
