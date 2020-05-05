@@ -657,9 +657,7 @@ def calculatehalls(level):
             if level[i][j] == "W" and level[i+2][j] == "W" and level[i+1][j] ==" ":
                 hallNum = hallNum +1
                 halllist.append((i+1,j))
-
-
-    print("Num of halls:",hallNum)
+                
     print(halllist)
     return halllist
 
@@ -799,7 +797,6 @@ xIndex = xPosition//32
 yIndex = (yPosition+16)//32#position of the end_rect
 #print(yIndex,xIndex)
 
-calculatehalls(level)
 
 while running:
     v = 8
