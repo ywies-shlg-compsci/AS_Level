@@ -909,6 +909,7 @@ while running:
 
             if e.type == pygame.QUIT:
                 running = False
+                gameover = True
 
 
             #if e.type == pygame.KEYUP:
