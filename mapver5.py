@@ -684,7 +684,10 @@ def makingcoins(level):
     for i in range(0,CoinNum):
         RanX = random.randint(1,13)
         RanY = random.randint(1,38)
-        level[RanX] = replace_C(level[RanX],RanY,"C")
+        if level[RanX+1][RanY] == "W" and level[RanX][RanY+1] == "W" and level[RanX][RanY-1] == "W" and level[RanX-1][RanY] == "W":
+            print("coin error")
+        else:
+            level[RanX] = replace_C(level[RanX],RanY,"C")
 
 def CreateMonsterInMaze(level):
     # Parse the level string above. W = wall, E = exit
@@ -815,7 +818,7 @@ player.rect.y = STARTY
 #print(level[13][37])
 #print(xPosition,yPosition)
 xIndex = xPosition//32
-yIndex = (yPosition+16)//32#position of the end_rect
+yIndex = (yPosition)//32#position of the end_rect
 #print(yIndex,xIndex)
 
 
@@ -906,8 +909,7 @@ while running:
 
             if e.type == pygame.QUIT:
                 running = False
-            if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
-                running = False
+
 
             #if e.type == pygame.KEYUP:
                 #monster = trackingmonsters[0]
