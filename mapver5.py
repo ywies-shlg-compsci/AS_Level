@@ -2,7 +2,6 @@ import os
 import pygame
 import random
 import makingmaze_version3 as makingmaze
-from playsound import playsound
 
 UP = 0
 RIGHT = 1
@@ -761,7 +760,6 @@ pygame.mixer.music.set_volume(0.1)
 SOUND_DIRECTORY = '/Users/hankli/PycharmProjects/mazegame /AS_Level/'
 bgm_sound = pygame.mixer.Sound(SOUND_DIRECTORY + "bgm.wav")
 pygame.mixer.Sound.play(bgm_sound)
-#playsound(SOUND_DIRECTORY + 'bgm.mp3')
 
 # Set up the display
 pygame.display.set_caption("Get to the red square!")  # the headline
@@ -866,17 +864,6 @@ while running:
             running = False
 
     pygame.display.flip()
-# check gamestate
-# if in start state:
-# show the start screen
-# if gave over
-# show the game over screen
-# check for user input -- press start..
-# did player press 'S' , or 'E' exit?
-# if press start
-#   gameover = False
-# if press exit
-#   running = False
     while not gameover:
         v = 8
         clock.tick(120)
