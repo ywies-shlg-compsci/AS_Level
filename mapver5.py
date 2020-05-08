@@ -781,6 +781,26 @@ MonsterNum = 1
 levelNum = 1
 playerlives = 3
 spikeNum = 10
+CollectedCoin = 0
+level = makingmaze.createNewMazeWithRooms()
+makingmonster(level)
+makingcoins(level)
+makingspikes(level)
+CreateMonsterInMaze(level)
+
+yPos = (STARTY - 16)//32
+xPos = STARTX//32
+while level[yPos][xPos] == "W":
+    STARTY = STARTY - 32
+    yPos = (STARTY - 16)//32
+
+player.rect.x = STARTX
+player.rect.y = STARTY
+#print(level[13][37])
+#print(xPosition,yPosition)
+xIndex = xPosition//32
+yIndex = (yPosition)//32#position of the end_rect
+#print(yIndex,xIndex)
 
 # Holds the level layout in a list of strings.
 #level = [
@@ -799,37 +819,12 @@ spikeNum = 10
     #"W W   WWWWWWWWWWW W WWW W   W          W",
     #"W  F  WE    S     W     W         F    W",
     #"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-level = makingmaze.createNewMazeWithRooms()
-makingmonster(level)
-makingcoins(level)
-makingspikes(level)
-CreateMonsterInMaze(level)
-
-
 
 KEY_PRESSED = False
 running = True
 Playerdraw = False
 Flag = 0
-CollectedCoin = 0
 animationindex = 0
-
-yPos = (STARTY - 16)//32
-xPos = STARTX//32
-while level[yPos][xPos] == "W":
-    STARTY = STARTY - 32
-    yPos = (STARTY - 16)//32
-
-player.rect.x = STARTX
-player.rect.y = STARTY
-#print(level[13][37])
-#print(xPosition,yPosition)
-xIndex = xPosition//32
-yIndex = (yPosition)//32#position of the end_rect
-#print(yIndex,xIndex)
-
-
-
 gameover = True
 gameState = "start"
 while running:
@@ -859,7 +854,39 @@ while running:
         if key[pygame.K_s]:
             playerlives = 3
             gameover = False
+            CollectedCoin =0
             gameState = "playing"
+            walls = []  # List to hold the walls
+            player = Player()
+            spikes = []
+            flyingspikes = []
+            squaremonsters = []
+            trackingmonsters = []
+            randommonsters = []
+            coinslist = []
+            behavelist1 = []
+            behavelist2 = []
+            CoinNum = 1
+            TotalCoinNum = CoinNum
+            MonsterNum = 1
+            levelNum = 1
+            spikeNum = 10
+            level = makingmaze.createNewMazeWithRooms()
+            player.rect.left = STARTX
+            player.rect.top = STARTY
+            yPos = (STARTY - 16) // 32
+            xPos = STARTX // 32
+            playerlives = playerlives
+            while level[yPos][xPos] == "W":
+                STARTY = STARTY - 32
+                yPos = (STARTY - 16) // 32
+            player.rect.x = STARTX
+            player.rect.y = STARTY
+            makingmonster(level)
+            makingcoins(level)
+            makingspikes(level)
+            CreateMonsterInMaze(level)
+
         if key[pygame.K_q]:
             running = False
 
@@ -869,7 +896,7 @@ while running:
         clock.tick(120)
 
 
-        if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W") or level[1][38]== "S" or level[1][38]== "R":
+        if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W") or level[1][38]== "S" or level[1][38]== "R" or level[1][37]== "S" or level[1][37]== "R":
             print("error")
             walls = []  # List to hold the walls
             player = Player()
@@ -894,7 +921,6 @@ while running:
             while level[yPos][xPos] == "W":
                 STARTY = STARTY - 32
                 yPos = (STARTY - 16) // 32
-
             player.rect.x = STARTX
             player.rect.y = STARTY
             makingmonster(level)
