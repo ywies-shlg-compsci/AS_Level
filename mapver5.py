@@ -675,6 +675,7 @@ def makingspikes(level):
 
 
 
+
 def makingmonster(level):
     for i in range(0,MonsterNum):
         RanX = random.randint(1, 13)
@@ -755,12 +756,12 @@ def drawtextwhite(window,content,x,y):
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
 pygame.init()
-#pygame.mixer.init()
-#pygame.mixer.music.set_volume(0.1)
+pygame.mixer.init()
+pygame.mixer.music.set_volume(0.1)
 SOUND_DIRECTORY = '/Users/hankli/PycharmProjects/mazegame /AS_Level/'
-#pygame.mixer.music.load(SOUND_DIRECTORY + 'bgm.mp3')
-#pygame.mixer.music.play(-1)
-playsound(SOUND_DIRECTORY + 'bgm.mp3')
+bgm_sound = pygame.mixer.Sound(SOUND_DIRECTORY + "bgm.wav")
+pygame.mixer.Sound.play(bgm_sound)
+#playsound(SOUND_DIRECTORY + 'bgm.mp3')
 
 # Set up the display
 pygame.display.set_caption("Get to the red square!")  # the headline
@@ -858,6 +859,7 @@ while running:
         drawtextwhite(screen, "Press Q To Quit The Game", 0, 64)
         key = pygame.key.get_pressed()
         if key[pygame.K_s]:
+            playerlives = 3
             gameover = False
             gameState = "playing"
         if key[pygame.K_q]:
@@ -880,7 +882,7 @@ while running:
         clock.tick(120)
 
 
-        if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W"):
+        if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W") or level[1][38]== "S" or level[1][38]== "R":
             print("error")
             walls = []  # List to hold the walls
             player = Player()
