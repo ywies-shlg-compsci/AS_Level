@@ -873,8 +873,8 @@ while running:
     while not gameover:
         v = 8
         clock.tick(120)
-        SOUND_DIRECTORY = 'hankli/PycharmProjects/mazegame/AS_Level/'
-        pygame.mixer.music.load(SOUND_DIRECTORY + 'bgm.wav')
+        SOUND_DIRECTORY = '/Users/hankli/PycharmProjects/mazegame /AS_Level/'
+        pygame.mixer.music.load(SOUND_DIRECTORY + 'bgm.mp3')
         pygame.mixer.music.play(-1)
 
         if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W"):
