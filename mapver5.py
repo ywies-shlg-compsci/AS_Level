@@ -422,41 +422,42 @@ class RandomMonster(object):
             self.direction = LEFT  # Moving left
             self.freedirection.append(self.direction)
         # print(self.freedirection)
-        number = random.randint(0, len(self.freedirection) - 1)
-        self.statelist.append(self.freedirection[number])
-        self.direction = self.statelist[0]
-        dir = self.direction
-        self.calculatedistance()
-        self.num = random.randint(1, self.num)
-        # print("previous",self.num)
-        # print(self.rect.x,self.rect.y)
-        if self.rect.x % 32 == 0 and self.rect.y % 32 == 16:  # block bottom left
-            if dir == RIGHT or dir == UP:
-                self.num = self.num + 0.5
-            if dir == LEFT or dir == DOWN:
-                self.num = self.num
-        if self.rect.x % 32 == 0 and self.rect.y % 32 == 0:  # block top left
-            if dir == RIGHT or dir == DOWN:
-                self.num = self.num + 0.5
-            if dir == LEFT or dir == UP:
-                self.num = self.num
-        if self.rect.x % 32 == 16 and self.rect.y % 32 == 0:  # block top right
-            if dir == LEFT or dir == DOWN:
-                self.num = self.num + 0.5
-            if dir == RIGHT or dir == UP:
-                self.num = self.num
-        if self.rect.x % 32 == 16 and self.rect.y % 32 == 16:  # block bottom right
-            if dir == LEFT or dir == UP:
-                self.num = self.num + 0.5
-            if dir == RIGHT or dir == DOWN:
-                self.num = self.num
-        # print("after", self.num)
-        self.statelist.append(16 * self.num)
-        # print(self.statelist)
-        self.freedirection = []
-        self.num = 1
-        self.counter = self.statelist[1]
-        # print((self.direction))
+        if len(self.freedirection) > 0:
+            number = random.randint(0, len(self.freedirection) - 1)
+            self.statelist.append(self.freedirection[number])
+            self.direction = self.statelist[0]
+            dir = self.direction
+            self.calculatedistance()
+            self.num = random.randint(1, self.num)
+            # print("previous",self.num)
+            # print(self.rect.x,self.rect.y)
+            if self.rect.x % 32 == 0 and self.rect.y % 32 == 16:  # block bottom left
+                if dir == RIGHT or dir == UP:
+                    self.num = self.num + 0.5
+                if dir == LEFT or dir == DOWN:
+                    self.num = self.num
+            if self.rect.x % 32 == 0 and self.rect.y % 32 == 0:  # block top left
+                if dir == RIGHT or dir == DOWN:
+                    self.num = self.num + 0.5
+                if dir == LEFT or dir == UP:
+                    self.num = self.num
+            if self.rect.x % 32 == 16 and self.rect.y % 32 == 0:  # block top right
+                if dir == LEFT or dir == DOWN:
+                    self.num = self.num + 0.5
+                if dir == RIGHT or dir == UP:
+                    self.num = self.num
+            if self.rect.x % 32 == 16 and self.rect.y % 32 == 16:  # block bottom right
+                if dir == LEFT or dir == UP:
+                    self.num = self.num + 0.5
+                if dir == RIGHT or dir == DOWN:
+                    self.num = self.num
+            # print("after", self.num)
+            self.statelist.append(16 * self.num)
+            # print(self.statelist)
+            self.freedirection = []
+            self.num = 1
+            self.counter = self.statelist[1]
+            # print((self.direction))
 
     def makebehaviourlistkeyboard(self, dir):  # create new behavior
         self.statelist = []
@@ -758,8 +759,9 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.music.set_volume(0.1)
 SOUND_DIRECTORY = '/Users/hankli/PycharmProjects/mazegame /AS_Level/'
-bgm_sound = pygame.mixer.Sound(SOUND_DIRECTORY + "bgm.wav")
-pygame.mixer.Sound.play(bgm_sound)
+pygame.mixer.music.load(SOUND_DIRECTORY + "bgm.wav")
+pygame.mixer.music.play(-1)
+
 
 # Set up the display
 pygame.display.set_caption("Get to the red square!")  # the headline
@@ -1087,6 +1089,8 @@ while running:
         # pygame.display.update()#update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
         if player.rect.colliderect(end_rect):
             if CollectedCoin == TotalCoinNum:
+                levelup_sound = pygame.mixer.Sound(SOUND_DIRECTORY + "levelup.wav")
+                pygame.mixer.Sound.play(levelup_sound)
                 walls = []  # List to hold the walls
                 player = Player()
                 spikes = []
