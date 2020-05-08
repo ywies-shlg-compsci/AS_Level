@@ -750,9 +750,12 @@ def drawtextwhite(window,content,x,y):
     text = font.render(content,1,white)
     window.blit(text,(x,y))
 
+
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.set_volume(0.1)
 
 # Set up the display
 pygame.display.set_caption("Get to the red square!")  # the headline
@@ -870,6 +873,10 @@ while running:
     while not gameover:
         v = 8
         clock.tick(120)
+        SOUND_DIRECTORY = 'hankli/PycharmProjects/mazegame/AS_Level/'
+        pygame.mixer.music.load(SOUND_DIRECTORY + 'bgm.wav')
+        pygame.mixer.music.play(-1)
+
         if (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex] == "W") or (level[yIndex][xIndex - 2] == "W" and level[yIndex - 1][xIndex] == "W" and level[yIndex - 1][xIndex-1] == "W") or (level[yIndex][xIndex - 1] == "W" and level[yIndex - 1][xIndex-1] == "W" and level[yIndex -2][xIndex] == "W"):
             print("error")
             walls = []  # List to hold the walls
